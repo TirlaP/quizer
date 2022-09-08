@@ -1,0 +1,181 @@
+.login {
+  .card-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  &Title {
+    color: red;
+  }
+
+  &SomethingElse {
+    color: red;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 32px;
+
+    position: absolute;
+    width: 522px;
+    height: 760px;
+    margin: auto;
+
+    background-color: #fff;
+
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05), 0px 8px 8px rgba(0, 0, 0, 0.05),
+      0px 1px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+  }
+
+  .input {
+    padding: 16px;
+
+    width: 298px;
+    height: 56px;
+
+    background: #f9f8f9;
+    border: 1px solid #d1cedc;
+    border-radius: 8px;
+  }
+
+  .div__remember {
+    margin-bottom: 48px;
+  }
+
+  .rememberText {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    /* identical to box height, or 114% */
+
+    /* Grey / Medium grey */
+
+    color: #666273;
+  }
+
+  .buttonLogin {
+    width: 160px;
+    height: 56px;
+
+    /* Main color */
+
+    background: #9141f6 !important;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+  .media__wrapper {
+    gap: 32px;
+  }
+
+  .buttonMedia {
+    padding: 12px 48px;
+    gap: 12px;
+
+    width: 301px;
+    height: 56px;
+
+    background: #ffffff;
+    color: #9141f6;
+    /* Main color */
+
+    border: 3px solid #9141f6;
+    border-radius: 8px;
+  }
+
+  .divider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    margin-top: 32px;
+
+    /* To show the lines on right
+    and left sides of the text */
+    &:after,
+    &:before {
+      content: "";
+      border: 1px solid #d7d4e0;
+      flex: 1;
+    }
+  }
+
+  .or_wrapper {
+    width: 55px;
+    height: 40px;
+    padding: 8px 16px;
+
+    border: 1px solid #d7d4e0;
+    border-radius: 37px;
+    font-size: 14px;
+    color: #666273;
+  }
+
+  .logo {
+    width: 130.29px;
+    height: 32px;
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-height: 900px), (max-width: 900px) {
+    .card {
+      width: 422px;
+      height: 590px;
+      gap: 0;
+    }
+
+    .input {
+      padding: 16px;
+
+      width: 298px;
+      height: 56px;
+
+      background: #f9f8f9;
+      border: 1px solid #d1cedc;
+      border-radius: 8px;
+    }
+
+    .div__remember {
+      margin-bottom: 12px;
+    }
+
+    .buttonLogin {
+      width: 130px;
+      height: 46px;
+
+      /* Main color */
+
+      background: #9141f6;
+      border: 3px solid rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+
+    .divider {
+      margin-top: 12px;
+    }
+
+    .media__wrapper {
+      gap: 12px;
+    }
+
+    .buttonMedia {
+      padding: 15px;
+      gap: 12px;
+
+      width: 301px;
+      height: 56px;
+
+      background: #ffffff;
+      color: #9141f6;
+      /* Main color */
+
+      border: 3px solid #9141f6;
+      border-radius: 8px;
+    }
+  }
+}
