@@ -1,4 +1,4 @@
-.login {
+.register {
   .card-center {
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
 
     position: absolute;
     width: 522px;
-    height: 760px;
+    height: 700px;
     margin: auto;
 
     background-color: #fff;
@@ -52,20 +52,26 @@
     color: #666273;
   }
 
-  .buttonLogin {
-    opacity: 0.9;
+  .buttonRegister {
     width: 160px;
     height: 56px;
+    margin-top: 32px;
 
     /* Main color */
 
     background: #9141f6 !important;
-    border: 3px solid rgba(0, 0, 0, 0.2) !important;
+    border: 3px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
+  }
+  .media__wrapper__column {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .media__wrapper__row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .buttonMedia {
@@ -76,32 +82,11 @@
     height: 56px;
 
     background: #ffffff;
+    color: #9141f6;
     /* Main color */
 
     border: 3px solid #9141f6;
     border-radius: 8px;
-
-    .p-button-label {
-      color: #9141f6;
-    }
-    .p-button-icon {
-      color: blue;
-    }
-
-    &:hover {
-      background: #9141f6;
-    }
-  }
-
-  .media__wrapper__column {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .media__wrapper__row {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
 
   .divider {
@@ -138,7 +123,7 @@
     margin-bottom: 1rem;
   }
 
-  .span__register {
+  .span__signin {
     opacity: 0.8;
     color: #9141f6;
     cursor: pointer;
@@ -159,7 +144,7 @@
       margin-bottom: 12px;
     }
 
-    .buttonLogin {
+    .buttonRegister {
       width: 130px;
       height: 46px;
 

@@ -18,6 +18,7 @@ import "./login.scss";
 import { auth } from "../../../config/firebase-config";
 import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
+import { ColloredCircles } from "../../../common/components/collored-circles/collored-circles";
 
 interface LoginFormProps {
   loginStore: LoginStoreImplementation;
@@ -25,6 +26,8 @@ interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = observer(
   ({ loginStore }) => {
+    const navigate = useNavigate();
+
     const [checked, setChecked] = useState(false);
 
     const [email, setEmail] = useState("");
@@ -117,12 +120,12 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
                     Remember me
                   </label>
                 </div>
-                <a
+                <span
                   className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
-                  href="/"
+                  onClick={() => navigate("/forgot-password")}
                 >
                   Forgot your password?
-                </a>
+                </span>
               </div>
 
               <Button
@@ -134,21 +137,30 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
                 <div className="or_wrapper">OR</div>
               </div>
 
-              <div className="flex flex-column mt-3 media__wrapper">
-                <div>
+              <div className=" mt-3 media__wrapper__column">
+                <div className="media__wrapper__row">
                   <Button
-                    label="Log In using Google"
+                    label="Google"
                     icon="pi pi-google"
-                    className="buttonMedia"
+                    className="buttonMedia google"
                     onClick={register}
                   />
+                  <Button
+                    label="Facebook"
+                    icon="pi pi-facebook"
+                    className="buttonMedia"
+                    onClick={loginStore.logout}
+                  />
                 </div>
-                <Button
-                  label="Log In using Facebook"
-                  icon="pi pi-facebook"
-                  className="buttonMedia"
-                  onClick={loginStore.logout}
-                />
+                <p>
+                  Do not have an account?{" "}
+                  <span
+                    className="span__register"
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
+                  </span>
+                </p>
               </div>
             </div>
           </div>
