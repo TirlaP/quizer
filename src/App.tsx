@@ -1,5 +1,8 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase-config";
+
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { Header } from "./common/components/header/header";
 import { LoginStoreImplementation } from "./features/authentication/login/store/LoginStore";
@@ -8,15 +11,30 @@ import { Login } from "./pages/authentication/login-page/login";
 import { Register } from "./pages/authentication/register-page/register";
 import { HomePage } from "./pages/home-page/home-page";
 import { LandingPage } from "./pages/landing-page/landing-page";
+import PrivateRoute, {
+  ProtectedRouteProps,
+} from "./pages/privateRoute/private-route";
 
 interface AppProps {
   loginStore: LoginStoreImplementation;
 }
 
 export const App: React.FC<AppProps> = ({ loginStore }) => {
+  const [authenticated, setAuthenticated] = useState(true);
+
+  const defaultProtectedRouteProps: Omit<ProtectedRouteProps, "component"> = {
+    isAuthenticated: authenticated,
+    authenticationPath: "/login",
+  };
+
   useEffect(() => {
-    console.log(loginStore.login.authenticated);
-    console.log(loginStore.login.user);
+    const isAuth = JSON.parse(localStorage.getItem("authenticated") || "false");
+
+    if (isAuth === true) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+    }
   }, []);
 
   return (
@@ -25,11 +43,17 @@ export const App: React.FC<AppProps> = ({ loginStore }) => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/landing-page" element={<LandingPage />} />
+        <Route path="/homepage" element={<HomePage />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute
+              {...defaultProtectedRouteProps}
+              component={<LandingPage />}
+            />
+          }
+        />
       </Routes>
-      {/* {!loginStore.login.authenticated && <Login />}
-      {loginStore.login.authenticated && <Header />} */}
     </div>
   );
 };

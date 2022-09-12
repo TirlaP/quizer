@@ -1,12 +1,12 @@
 .register {
-  .card-center {
+  .card--center {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
   }
 
-  .card {
+  .register__card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +26,7 @@
     border-radius: 14px;
   }
 
-  .input {
+  .register__input {
     padding: 16px;
 
     width: 298px;
@@ -37,22 +37,7 @@
     border-radius: 8px;
   }
 
-  .div__remember {
-    margin-bottom: 48px;
-  }
-
-  .rememberText {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    /* identical to box height, or 114% */
-
-    /* Grey / Medium grey */
-
-    color: #666273;
-  }
-
-  .buttonRegister {
+  .register__button-register {
     width: 160px;
     height: 56px;
     margin-top: 32px;
@@ -63,18 +48,7 @@
     border: 3px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
   }
-  .media__wrapper__column {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .media__wrapper__row {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .buttonMedia {
+  .register__button-media {
     padding: 12px 48px;
     gap: 12px;
 
@@ -89,7 +63,18 @@
     border-radius: 8px;
   }
 
-  .divider {
+  .media__wrapper__column {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .media__wrapper__row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .register__divider {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -106,7 +91,7 @@
     }
   }
 
-  .or_wrapper {
+  .register__or-wrapper {
     width: 55px;
     height: 40px;
     padding: 8px 16px;
@@ -123,7 +108,7 @@
     margin-bottom: 1rem;
   }
 
-  .span__signin {
+  .register__span-signin {
     opacity: 0.8;
     color: #9141f6;
     cursor: pointer;
@@ -133,18 +118,22 @@
     }
   }
 
+  .p-invalid {
+    border: 2px solid;
+  }
+
+  .form__icon--exclamation {
+    color: #cd1414 !important;
+  }
+
   @media screen and (max-height: 900px), (max-width: 900px) {
-    .card {
+    .register__card {
       width: 422px;
       height: 590px;
       gap: 0;
     }
 
-    .div__remember {
-      margin-bottom: 12px;
-    }
-
-    .buttonRegister {
+    .register__button-register {
       width: 130px;
       height: 46px;
 
@@ -155,8 +144,19 @@
       border-radius: 8px;
     }
 
-    .divider {
-      margin-top: 12px;
+    .register__button-media {
+      padding: 15px;
+      gap: 12px;
+
+      width: 143px;
+      height: 56px;
+
+      background: #ffffff;
+      color: #9141f6;
+      /* Main color */
+
+      border: 3px solid #9141f6;
+      border-radius: 8px;
     }
 
     .media__wrapper__column {
@@ -170,19 +170,8 @@
       gap: 12px;
     }
 
-    .buttonMedia {
-      padding: 15px;
-      gap: 12px;
-
-      width: 143px;
-      height: 56px;
-
-      background: #ffffff;
-      color: #9141f6;
-      /* Main color */
-
-      border: 3px solid #9141f6;
-      border-radius: 8px;
+    .register__divider {
+      margin-top: 12px;
     }
   }
 }

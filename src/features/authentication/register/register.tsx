@@ -1,120 +1,165 @@
 import React, { useEffect, useState } from "react";
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  updateProfile,
   onAuthStateChanged,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
 
 import logo from "../../../common/assets/Logo.png";
 import "./register.scss";
 
 import { auth } from "../../../config/firebase-config";
-// import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
-import { ColloredCircles } from "../../../common/components/collored-circles/collored-circles";
 
-interface RegisterFormProps {
-  // registerStore: RegisterStoreImplementation;
-}
+interface RegisterFormProps {}
+
+interface UserData {}
 
 export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
   const navigate = useNavigate();
 
-  const [checked, setChecked] = useState(false);
+  const [user, setUser] = useState<UserData | null>(null);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const loginToApp = (event: any) => {
-    event.preventDefault();
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState(initialValues);
+  const [isSubmit, setIsSubmit] = useState(false);
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // loginStore.loginSucces(onAuthStateChanged);
-      })
-      .catch((err) => {
-        console.log(email, password);
-      });
+  const register = async () => {
+    const errors = initialValues;
+    try {
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        formValues.email,
+        formValues.password
+      );
+      navigate("/homepage");
+    } catch (error: any) {
+      if (error.message.includes("email-already-in-use")) {
+        errors.email = "Email already in use.";
+        setFormErrors(errors);
+      }
+      console.log(error.message);
+    }
   };
 
-  const register = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userAuth) => {
-        console.log("User created");
-      })
-      .catch((err) => {
-        alert(err);
-      });
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
   };
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (userAuth) => {
-  //     if (userAuth) {
-  //       loginStore.loginSucces(userAuth);
-  //       console.log(userAuth);
-  //     } else {
-  //       loginStore.loginError();
-  //       console.log("ERROR ON LOG IN");
-  //     }
-  //   });
-  //   console.log("page loaded");
-  // }, []);
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
+  };
+
+  const validate = (values: any) => {
+    const errors = initialValues;
+
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+    if (!values.email) {
+      errors.email = "Email is required.";
+    } else if (!regex.test(values.email)) {
+      errors.email = "This is not a valid email format!";
+    }
+    if (!values.password) {
+      errors.password = "Password is required.";
+    } else if (values.password.length < 8) {
+      errors.password = "Password must be at least 8 characters.";
+    }
+    return errors;
+  };
+
+  useEffect(() => {
+    // validating form errors to see if we can loggin to app
+    if (!formErrors.email.length && !formErrors.password.length && isSubmit) {
+      register();
+    }
+  }, [formErrors]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
 
   return (
     <div className="register">
-      <div className=" align-items-center justify-content-center card-center">
-        <div className="card">
+      <div className=" align-items-center justify-content-center card--center">
+        <div className="register__card">
           <div className="text-center mb-2">
             <img src={logo} alt="hyper" height={50} className="logo" />
           </div>
 
           <div className="align-items-center">
-            <div className="flex flex-column align-items-center">
-              <label
-                htmlFor="email"
-                className="block align-self-start text-900 font-medium mb-2 relative"
-              >
-                Username or Email
-              </label>
-              <InputText
-                id="email"
-                type="text"
-                className="input"
-                placeholder="Enter your username"
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-column align-items-start p-input-icon-right">
+                <label
+                  htmlFor="email"
+                  className="block align-self-start text-900 font-medium mb-2 relative"
+                >
+                  Username or Email
+                </label>
 
-            <div className="flex flex-column mt-3">
-              <label
-                htmlFor="password"
-                className="block align-self-start text-900 font-medium mb-2 relative"
-              >
-                Password
-              </label>
-              <InputText
-                id="password"
-                type="password"
-                className="input"
-                placeholder="Enter your password"
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </div>
+                {formErrors.email && (
+                  <i className="pi pi-exclamation-triangle form__icon--exclamation" />
+                )}
 
-            <Button
-              label="Register"
-              className="buttonRegister"
-              onClick={loginToApp}
-            />
-            <div className="divider">
-              <div className="or_wrapper">OR</div>
+                <InputText
+                  name="email"
+                  id="email"
+                  type="text"
+                  className={`register__input ${
+                    formErrors.email ? "p-invalid" : ""
+                  }`}
+                  placeholder="Enter your username"
+                  value={formValues.email}
+                  onChange={handleChange}
+                />
+                <small id="email-help" className="p-error">
+                  {formErrors.email}
+                </small>
+              </div>
+
+              <div className="flex flex-column align-items-start mt-3 p-input-icon-right">
+                <label
+                  htmlFor="password"
+                  className="block align-self-start text-900 font-medium mb-2 relative"
+                >
+                  Password
+                </label>
+
+                {formErrors.password && (
+                  <i className="pi pi-exclamation-triangle form__icon--exclamation" />
+                )}
+
+                <InputText
+                  name="password"
+                  id="password"
+                  type="password"
+                  className={`register__input ${
+                    formErrors.password ? "p-invalid" : ""
+                  }`}
+                  placeholder="Enter your password"
+                  value={formValues.password}
+                  onChange={handleChange}
+                />
+                <small id="password-help" className="p-error">
+                  {formErrors.password}
+                </small>
+              </div>
+
+              <Button label="Register" className="register__button-register" />
+            </form>
+
+            <div className="register__divider">
+              <div className="register__or-wrapper">OR</div>
             </div>
 
             <div className="flex flex-column mt-3 media__wrapper__column">
@@ -122,19 +167,19 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
                 <Button
                   label="Google"
                   icon="pi pi-google"
-                  className="buttonMedia"
+                  className="register__button-media"
                   onClick={register}
                 />
                 <Button
                   label="Facebook"
                   icon="pi pi-facebook"
-                  className="buttonMedia"
+                  className="register__button-media"
                 />
               </div>
               <p>
                 Already have an account?{" "}
                 <span
-                  className="span__signin"
+                  className="register__span-signin"
                   onClick={() => navigate("/login")}
                 >
                   Login

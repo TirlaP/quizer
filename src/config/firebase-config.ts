@@ -18,17 +18,19 @@ import {
   updateProfile,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification,
   signOut,
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAja6lFWNkmvYPj3vKV3Yw0aEGpFyPgJHA",
-  authDomain: "fir-crud-835bc.firebaseapp.com",
-  projectId: "fir-crud-835bc",
-  storageBucket: "fir-crud-835bc.appspot.com",
-  messagingSenderId: "371086947634",
-  appId: "1:371086947634:web:09ae317bcbbda43036532b",
-  measurementId: "G-MZ5JT0PF4Q",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // init firebase app
@@ -55,5 +57,7 @@ export {
   updateProfile,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification,
   signOut,
 };

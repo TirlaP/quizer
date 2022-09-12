@@ -1,21 +1,15 @@
 import { action, makeObservable, observable } from "mobx";
 
 interface LoginData {
-  loading: boolean;
-  authenticated: boolean;
+  isLoading: boolean;
+  isAuthenticated: boolean;
   user: object;
-  // {
-  //   email: string;
-  //   uid: string;
-  //   displayName: string;
-  //   photoUrl: string;
-  // };
 }
 
 export class LoginStoreImplementation {
   login: LoginData = {
-    loading: false,
-    authenticated: false,
+    isLoading: false,
+    isAuthenticated: false,
     user: {},
   };
 
@@ -27,17 +21,17 @@ export class LoginStoreImplementation {
   }
 
   loginSucces(user: object) {
-    this.login.authenticated = true;
-    this.login.loading = false;
+    this.login.isAuthenticated = true;
+    this.login.isLoading = false;
     this.login.user = user;
   }
   loginError() {
-    this.login.authenticated = false;
-    this.login.loading = true;
+    this.login.isAuthenticated = false;
+    this.login.isLoading = true;
   }
   logout() {
-    this.login.authenticated = false;
-    this.login.loading = false;
+    this.login.isAuthenticated = false;
+    this.login.isLoading = false;
     this.login.user = {};
   }
 }

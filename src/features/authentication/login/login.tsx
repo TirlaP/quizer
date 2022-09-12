@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
@@ -18,123 +14,190 @@ import "./login.scss";
 import { auth } from "../../../config/firebase-config";
 import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
-import { ColloredCircles } from "../../../common/components/collored-circles/collored-circles";
-
 interface LoginFormProps {
   loginStore: LoginStoreImplementation;
 }
+
+interface UserData {}
 
 export const LoginForm: React.FC<LoginFormProps> = observer(
   ({ loginStore }) => {
     const navigate = useNavigate();
 
     const [checked, setChecked] = useState(false);
+    const [user, setUser] = useState<UserData | null>(null);
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const loginToApp = (event: any) => {
-      event.preventDefault();
+    const initialValues = {
+      email: "",
+      password: "",
+    };
+    const [formValues, setFormValues] = useState(initialValues);
+    const [formErrors, setFormErrors] = useState(initialValues);
+    const [isSubmit, setIsSubmit] = useState(false);
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          loginStore.loginSucces(onAuthStateChanged);
-        })
-        .catch((err) => {
-          console.log(email, password);
-        });
+    const loginToApp = async () => {
+      const errors = initialValues;
+      try {
+        const user = await signInWithEmailAndPassword(
+          auth,
+          formValues.email,
+          formValues.password
+        );
+        localStorage.setItem("authenticated", JSON.stringify(true));
+        navigate("/homepage");
+      } catch (error: any) {
+        console.log(error.message);
+        if (error.message.includes("user-not-found")) {
+          errors.email = "Email is incorrect.";
+          setFormErrors(errors);
+        } else if (error.message.includes("password")) {
+          errors.password = "Password is incorrect.";
+          setFormErrors(errors);
+        }
+      }
     };
 
-    const register = () => {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userAuth) => {
-          console.log("User created");
-        })
-        .catch((err) => {
-          alert(err);
-        });
+    const logout = async () => {
+      await signOut(auth);
+      localStorage.setItem("authenticated", JSON.stringify(false));
+    };
+
+    const handleChange = (e: any) => {
+      const { name, value } = e.target;
+      setFormValues({ ...formValues, [name]: value });
+    };
+
+    const handleSubmit = (e: any) => {
+      e.preventDefault();
+      setFormErrors(validate(formValues));
+      setIsSubmit(true);
+    };
+
+    const validate = (values: any) => {
+      const errors = initialValues;
+
+      const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+      if (!values.email) {
+        errors.email = "Email is required.";
+      } else if (!regex.test(values.email)) {
+        errors.email = "This is not a valid email format!";
+      }
+      if (!values.password) {
+        errors.password = "Password is required.";
+      } else if (values.password.length < 8) {
+        errors.password = "Password must be more than 8 characters.";
+      }
+      return errors;
     };
 
     useEffect(() => {
-      onAuthStateChanged(auth, (userAuth) => {
-        if (userAuth) {
-          loginStore.loginSucces(userAuth);
-          console.log(userAuth);
-        } else {
-          loginStore.loginError();
-          console.log("ERROR ON LOG IN");
-        }
+      // validating form errors to see if we can loggin to app
+      if (!formErrors.email.length && !formErrors.password.length && isSubmit) {
+        loginToApp();
+      }
+    }, [formErrors]);
+
+    useEffect(() => {
+      onAuthStateChanged(auth, (currentUser) => {
+        localStorage.setItem("user", JSON.stringify(currentUser));
+        setUser(currentUser);
       });
-      console.log("page loaded");
     }, []);
 
     return (
       <div className="login">
-        <div className=" align-items-center justify-content-center card-center">
-          <div className="card">
+        <div className=" align-items-center justify-content-center card--center">
+          <div className="login__card">
             <div className="text-center mb-2">
-              <img src={logo} alt="hyper" height={50} className="logo" />
+              <img src={logo} alt="hyper" height={50} className="login__logo" />
             </div>
 
             <div className="align-items-center">
-              <div className="flex flex-column align-items-center">
-                <label
-                  htmlFor="email"
-                  className="block align-self-start text-900 font-medium mb-2 relative"
-                >
-                  Username or Email
-                </label>
-                <InputText
-                  id="email"
-                  type="text"
-                  className="input"
-                  placeholder="Enter your username"
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </div>
-
-              <div className="flex flex-column mt-3">
-                <label
-                  htmlFor="password"
-                  className="block align-self-start text-900 font-medium mb-2 relative"
-                >
-                  Password
-                </label>
-                <InputText
-                  id="password"
-                  type="password"
-                  className="input"
-                  placeholder="Enter your password"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-              </div>
-
-              <div className="flex align-items-center justify-content-between mt-3 div__remember">
-                <div className="flex align-items-center">
-                  <Checkbox
-                    id="rememberme"
-                    onChange={(e) => setChecked(e.checked)}
-                    checked={checked}
-                    className="mr-2"
-                  />
-                  <label htmlFor="rememberme" className="rememberText">
-                    Remember me
+              <form onSubmit={handleSubmit}>
+                <div className="flex flex-column align-items-start p-input-icon-right">
+                  <label
+                    htmlFor="email"
+                    className="block align-self-start text-900 font-medium mb-2 relative"
+                  >
+                    Username or Email
                   </label>
-                </div>
-                <span
-                  className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
-                  onClick={() => navigate("/forgot-password")}
-                >
-                  Forgot your password?
-                </span>
-              </div>
 
-              <Button
-                label="Log In"
-                className="buttonLogin"
-                onClick={loginToApp}
-              />
-              <div className="divider">
-                <div className="or_wrapper">OR</div>
+                  {formErrors.email && (
+                    <i className="pi pi-exclamation-triangle form__icon--exlamation" />
+                  )}
+
+                  <InputText
+                    name="email"
+                    id="email"
+                    type="text"
+                    className={`login__input ${
+                      formErrors.email ? "p-invalid" : ""
+                    }`}
+                    placeholder="Enter your username"
+                    value={formValues.email}
+                    onChange={handleChange}
+                    validateOnly={true}
+                  />
+                  <small id="email-help" className="p-error">
+                    {formErrors.email}
+                  </small>
+                </div>
+
+                <div className="flex flex-column mt-3 align-items-start p-input-icon-right">
+                  <label
+                    htmlFor="password"
+                    className="block align-self-start text-900 font-medium mb-2 relative"
+                  >
+                    Password
+                  </label>
+
+                  {formErrors.password && (
+                    <i className="pi pi-exclamation-triangle form__icon--exlamation" />
+                  )}
+
+                  <InputText
+                    name="password"
+                    id="password"
+                    type="password"
+                    className={`login__input ${
+                      formErrors.password ? "p-invalid" : ""
+                    }`}
+                    placeholder="Enter your password"
+                    value={formValues.password}
+                    onChange={handleChange}
+                  />
+                  <small id="password-help" className="p-error">
+                    {formErrors.password}
+                  </small>
+                </div>
+
+                <div className="flex align-items-center justify-content-between mt-3 login__remember-section">
+                  <div className="flex align-items-center">
+                    <Checkbox
+                      id="rememberme"
+                      onChange={(e) => setChecked(e.checked)}
+                      checked={checked}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="rememberme"
+                      className="login__remember-text"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <span
+                    className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
+                    onClick={() => navigate("/forgot-password")}
+                  >
+                    Forgot your password?
+                  </span>
+                </div>
+
+                <Button label="Log In" className="login__button-login" />
+              </form>
+              <div className="login__divider">
+                <div className="login__or-wrapper">OR</div>
               </div>
 
               <div className=" mt-3 media__wrapper__column">
@@ -142,26 +205,27 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
                   <Button
                     label="Google"
                     icon="pi pi-google"
-                    className="buttonMedia google"
-                    onClick={register}
+                    className="login__button-media google"
+                    onClick={loginToApp}
                   />
                   <Button
                     label="Facebook"
                     icon="pi pi-facebook"
-                    className="buttonMedia"
+                    className="login__button-media"
                     onClick={loginStore.logout}
                   />
                 </div>
                 <p>
                   Do not have an account?{" "}
                   <span
-                    className="span__register"
+                    className="login__span-register"
                     onClick={() => navigate("/register")}
                   >
                     Register
                   </span>
                 </p>
               </div>
+              {user && <Button label="Sign Out" onClick={logout} />}
             </div>
           </div>
         </div>

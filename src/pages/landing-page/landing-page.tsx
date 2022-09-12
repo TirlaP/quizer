@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ColloredCircles } from "../../common/components/collored-circles/collored-circles";
 
 import rocket from "../../common/assets/rocket.png";
@@ -9,6 +9,12 @@ import { useNavigate } from "react-router-dom";
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+
+  const [user, setUser] = useState<object | null>(null);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  }, []);
 
   return (
     <div className="landing--page card--center align-items-center">

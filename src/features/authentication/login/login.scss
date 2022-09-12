@@ -1,12 +1,12 @@
 .login {
-  .card-center {
+  .card--center {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
   }
 
-  .card {
+  .login__card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +26,7 @@
     border-radius: 14px;
   }
 
-  .input {
+  .login__input {
     padding: 16px;
 
     width: 298px;
@@ -37,11 +37,11 @@
     border-radius: 8px;
   }
 
-  .div__remember {
+  .login__remember-section {
     margin-bottom: 48px;
   }
 
-  .rememberText {
+  .login__remember-text {
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
@@ -52,7 +52,7 @@
     color: #666273;
   }
 
-  .buttonLogin {
+  .login__button-login {
     opacity: 0.9;
     width: 160px;
     height: 56px;
@@ -68,7 +68,7 @@
     }
   }
 
-  .buttonMedia {
+  .login__button-media {
     padding: 12px 48px;
     gap: 12px;
 
@@ -104,7 +104,7 @@
     gap: 12px;
   }
 
-  .divider {
+  .login__divider {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -121,7 +121,7 @@
     }
   }
 
-  .or_wrapper {
+  .login__or-wrapper {
     width: 55px;
     height: 40px;
     padding: 8px 16px;
@@ -132,13 +132,13 @@
     color: #666273;
   }
 
-  .logo {
+  .login__logo {
     width: 130.29px;
     height: 32px;
     margin-bottom: 1rem;
   }
 
-  .span__register {
+  .login__span-register {
     opacity: 0.8;
     color: #9141f6;
     cursor: pointer;
@@ -148,18 +148,26 @@
     }
   }
 
+  .p-invalid {
+    border: 2px solid;
+  }
+
+  .form__icon--exlamation {
+    color: #cd1414 !important;
+  }
+
   @media screen and (max-height: 900px), (max-width: 900px) {
-    .card {
+    .login__card {
       width: 422px;
       height: 590px;
       gap: 0;
     }
 
-    .div__remember {
+    .login__remember-section {
       margin-bottom: 12px;
     }
 
-    .buttonLogin {
+    .login__button-login {
       width: 130px;
       height: 46px;
 
@@ -170,7 +178,7 @@
       border-radius: 8px;
     }
 
-    .divider {
+    .login__divider {
       margin-top: 12px;
     }
 
@@ -185,7 +193,7 @@
       gap: 12px;
     }
 
-    .buttonMedia {
+    .login__button-media {
       padding: 15px;
       gap: 12px;
 
