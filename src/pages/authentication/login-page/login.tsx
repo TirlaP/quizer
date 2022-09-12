@@ -1,7 +1,12 @@
 import React from "react";
+import { LoginForm } from "../../../features/authentication/login/login";
 
 interface LoginProps {}
 
 export const Login: React.FC<LoginProps> = ({}) => {
-  return <div></div>;
+  return (
+    <div>
+      <LoginForm />
+    </div>
+  );
 };

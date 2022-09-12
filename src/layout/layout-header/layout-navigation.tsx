@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
-import { PAGES_PATHS } from 'common/constants/constant'
+import { PAGES_PATHS } from "../../common/constants/constant";
 
 export const LayoutNavigation = () => {
   return (
@@ -19,5 +19,5 @@ export const LayoutNavigation = () => {
         </li>
       </ul>
     </nav>
-  )
-}
+  );
+};
