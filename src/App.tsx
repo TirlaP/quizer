@@ -30,11 +30,7 @@ export const App: React.FC<AppProps> = ({ loginStore }) => {
   useEffect(() => {
     const isAuth = JSON.parse(localStorage.getItem("authenticated") || "false");
 
-    if (isAuth === true) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
+    setIsAuthenticated(isAuth);
   }, []);
 
   return (
