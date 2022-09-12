@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +57,28 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
           errors.password = "Password is incorrect.";
           setFormErrors(errors);
         }
+      }
+    };
+
+    const signInWithGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        localStorage.setItem("authenticated", JSON.stringify(true));
+        navigate("/homepage");
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    const signInWithFacebook = async () => {
+      const provider = new FacebookAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        localStorage.setItem("authenticated", JSON.stringify(true));
+        navigate("/homepage");
+      } catch (error: any) {
+        console.log(error.message);
       }
     };
 
@@ -206,13 +231,13 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
                     label="Google"
                     icon="pi pi-google"
                     className="login__button-media google"
-                    onClick={loginToApp}
+                    onClick={signInWithGoogle}
                   />
                   <Button
                     label="Facebook"
                     icon="pi pi-facebook"
                     className="login__button-media"
-                    onClick={loginStore.logout}
+                    onClick={signInWithFacebook}
                   />
                 </div>
                 <p>

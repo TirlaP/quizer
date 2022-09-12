@@ -20,10 +20,10 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ loginStore }) => {
-  const [authenticated, setAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const defaultProtectedRouteProps: Omit<ProtectedRouteProps, "component"> = {
-    isAuthenticated: authenticated,
+    isAuthenticated,
     authenticationPath: "/login",
   };
 
@@ -31,9 +31,9 @@ export const App: React.FC<AppProps> = ({ loginStore }) => {
     const isAuth = JSON.parse(localStorage.getItem("authenticated") || "false");
 
     if (isAuth === true) {
-      setAuthenticated(true);
+      setIsAuthenticated(true);
     } else {
-      setAuthenticated(false);
+      setIsAuthenticated(false);
     }
   }, []);
 
