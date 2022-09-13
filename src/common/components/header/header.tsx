@@ -19,10 +19,6 @@ export const Header: React.FC<HeaderProps> = ({}) => {
     // localStorage.removeItem("user");
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
-
   return (
     <>
       <nav className="navbar">

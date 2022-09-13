@@ -132,7 +132,6 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
         let user;
         if (currentUser) {
           currentUser.getIdTokenResult().then((idTokenResult) => {
-            // console.log(typeof idTokenResult.claims.admin); // returns boolean
             const isAdmin = !!idTokenResult.claims.admin;
             user = { ...currentUser, isAdmin };
 
@@ -140,7 +139,6 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
             setUser(user);
           });
         }
-        // console.log(user);
       });
     }, []);
 

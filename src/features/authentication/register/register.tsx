@@ -198,20 +198,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
               </p>
             </div>
           </div>
-          {/* {user && (
-            <Button
-              label="Make admin"
-              onClick={(e) => {
-                e.preventDefault();
-                const addAdminRole = httpsCallable(functions, "addAdminRole");
-                addAdminRole({
-                  email: formValues.email,
-                }).then((result) => {
-                  console.log(result);
-                });
-              }}
-            />
-          )} */}
         </div>
       </div>
     </div>
