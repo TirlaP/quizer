@@ -21,6 +21,8 @@ import {
 } from "../../../config/firebase-config";
 import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
+
+// import { getErrors } from "../../../common/services/util-service";
 interface LoginFormProps {
   loginStore: LoginStoreImplementation;
 }
@@ -40,7 +42,7 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
     };
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState(initialValues);
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [isSubmitPress, setIsSubmitPress] = useState(false);
 
     const loginToApp = async () => {
       const errors = initialValues;
@@ -88,38 +90,42 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
 
     const handleChange = (e: any) => {
       const { name, value } = e.target;
-      setFormValues({ ...formValues, [name]: value });
+      setFormValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const handleSubmit = (e: any) => {
       e.preventDefault();
-      setFormErrors(validate(formValues));
-      setIsSubmit(true);
+      setFormErrors(getErrors(formValues));
+      setIsSubmitPress(true);
     };
 
-    const validate = (values: any) => {
-      const errors = initialValues;
+    const getErrors = (values: any) => {
+      const validationErrors = initialValues;
 
       const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
       if (!values.email) {
-        errors.email = "Email is required.";
+        validationErrors.email = "Email is required.";
       } else if (!regex.test(values.email)) {
-        errors.email = "This is not a valid email format!";
+        validationErrors.email = "This is not a valid email format!";
       }
       if (!values.password) {
-        errors.password = "Password is required.";
+        validationErrors.password = "Password is required.";
       } else if (values.password.length < 8) {
-        errors.password = "Password must be more than 8 characters.";
+        validationErrors.password = "Password must be more than 8 characters.";
       }
-      return errors;
+      return validationErrors;
     };
 
     useEffect(() => {
       // validating form errors to see if we can loggin to app
-      if (!formErrors.email.length && !formErrors.password.length && isSubmit) {
+      if (
+        !formErrors.email.length &&
+        !formErrors.password.length &&
+        isSubmitPress
+      ) {
         loginToApp();
       }
-    }, [formErrors]);
+    }, [formErrors, isSubmitPress]);
 
     useEffect(() => {
       onAuthStateChanged(auth, (currentUser) => {
