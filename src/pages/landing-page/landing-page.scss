@@ -1,4 +1,4 @@
-.landing--page {
+.landing-page {
   .card--center {
     display: flex;
     justify-content: center;
@@ -8,14 +8,14 @@
     height: 100vh;
   }
 
-  .landing--container {
+  .landing-page__container {
     display: flex;
     flex-direction: column;
     margin-left: 200px;
     z-index: 20;
   }
 
-  .landing--content {
+  .landing-page__content {
     z-index: 20;
     width: 600px;
     position: absolute;
@@ -30,7 +30,7 @@
     margin-bottom: auto;
   }
 
-  .landing--title {
+  .landing-page__title {
     z-index: 20;
     width: 500px;
     height: 144px;
@@ -43,7 +43,7 @@
 
     color: #1a1a1a;
   }
-  .landing--subtitle {
+  .landing-page__subtitle {
     z-index: 20;
     width: 424px;
     height: 64px;
@@ -56,7 +56,7 @@
     color: #2b2b2b;
   }
 
-  .landing--photo {
+  .landing-page__photo {
     z-index: 10;
     max-width: 100%;
     max-height: 100%;
@@ -66,7 +66,7 @@
     right: 80px;
   }
 
-  .landing--button {
+  .landing-page__button {
     z-index: 20;
     opacity: 0.9;
     width: 217px;
@@ -92,7 +92,7 @@
   }
 
   @media screen and (max-width: 900px), (max-height: 900px) {
-    .landing--photo {
+    .landing-page__photo {
       width: 400px;
       height: 400px;
     }

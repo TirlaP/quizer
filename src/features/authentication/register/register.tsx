@@ -61,30 +61,30 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
+    setFormErrors(getErrors(formValues));
     setIsSubmit(true);
   };
 
-  const validate = (values: any) => {
-    const errors = initialValues;
+  const getErrors = (values: any) => {
+    const validationErrors = initialValues;
 
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
     if (!values.email) {
-      errors.email = "Email is required.";
+      validationErrors.email = "Email is required.";
     } else if (!regex.test(values.email)) {
-      errors.email = "This is not a valid email format!";
+      validationErrors.email = "This is not a valid email format!";
     }
     if (!values.password) {
-      errors.password = "Password is required.";
+      validationErrors.password = "Password is required.";
     } else if (values.password.length < 8) {
-      errors.password = "Password must be at least 8 characters.";
+      validationErrors.password = "Password must be at least 8 characters.";
     }
-    return errors;
+    return validationErrors;
   };
 
   useEffect(() => {
