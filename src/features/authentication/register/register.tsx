@@ -10,7 +10,11 @@ import { Button } from "primereact/button";
 import logo from "../../../common/assets/Logo.png";
 import "./register.scss";
 
-import { auth } from "../../../config/firebase-config";
+import {
+  auth,
+  functions,
+  httpsCallable,
+} from "../../../config/firebase-config";
 import { observer } from "mobx-react-lite";
 
 interface RegisterFormProps {}
@@ -38,6 +42,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
         formValues.email,
         formValues.password
       );
+      const addUserRole = httpsCallable(functions, "addUserRole");
+      addUserRole({
+        email: formValues.email,
+      }).then((result) => {
+        console.log(result);
+      });
+
       navigate("/homepage");
     } catch (error: any) {
       if (error.message.includes("email-already-in-use")) {
@@ -187,6 +198,20 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
               </p>
             </div>
           </div>
+          {/* {user && (
+            <Button
+              label="Make admin"
+              onClick={(e) => {
+                e.preventDefault();
+                const addAdminRole = httpsCallable(functions, "addAdminRole");
+                addAdminRole({
+                  email: formValues.email,
+                }).then((result) => {
+                  console.log(result);
+                });
+              }}
+            />
+          )} */}
         </div>
       </div>
     </div>
