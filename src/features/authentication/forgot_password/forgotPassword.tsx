@@ -27,21 +27,26 @@ export const ForgotPasswordForm: React.FC = observer(() => {
     return sendPasswordResetEmail(auth, email);
   };
 
-  const validate = (value: any) => {
-    const errors = initialValues;
+  // Validate the input fields and check for any errors.
+  // If found, update the local object with the errors found.
+  // Return it to be used for a better user experience.
+  const getErrors = (value: any) => {
+    const validationErrors = initialValues;
+    console.log(validationErrors);
 
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
     if (!value) {
-      errors.email = "Email is required.";
+      validationErrors.email = "Email is required.";
     } else if (!regex.test(value)) {
-      errors.email = "This is not a valid email format!";
+      validationErrors.email = "This is not a valid email format!";
     }
-    return errors;
+    console.log(validationErrors === initialValues);
+    return validationErrors;
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setFormErrors(validate(email));
+    setFormErrors(getErrors(email));
     setIsSubmitPress(true);
   };
 
@@ -63,12 +68,12 @@ export const ForgotPasswordForm: React.FC = observer(() => {
           setSuccessfulSubmit(false);
         });
     }
-  }, [formErrors]);
+  }, [formErrors, isSubmitPress]);
 
   return (
-    <div className="forgot__password">
+    <div className="forgot-password">
       <div className=" align-items-center justify-content-center card--center">
-        <div className="forgot__card">
+        <div className="forgot-password__card">
           <div className="text-center mb-2">
             <img src={logo} alt="hyper" height={50} className="logo" />
           </div>
@@ -89,7 +94,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
                 <InputText
                   id="email"
                   type="text"
-                  className={`forgot__input ${
+                  className={`forgot-password__input ${
                     formErrors.email ? "p-invalid" : ""
                   }`}
                   placeholder="Email or Username"
@@ -102,18 +107,18 @@ export const ForgotPasswordForm: React.FC = observer(() => {
 
               <Button
                 label="Send Reset Link"
-                className="forgot__button-reset google mt-3"
+                className="forgot-password__button-reset mt-3"
                 onClick={handleSubmit}
               />
-              <div className="forgot__divider">
-                <div className="forgot__or-wrapper">OR</div>
+              <div className="forgot-password__divider">
+                <div className="forgot-password__or-wrapper">OR</div>
               </div>
 
               <div className="flex flex-column mt-3">
                 <p>
                   Back to{" "}
                   <span
-                    className="forgot__span-login"
+                    className="forgot-password__span-login"
                     onClick={() => navigate("/login")}
                   >
                     Login
@@ -124,10 +129,10 @@ export const ForgotPasswordForm: React.FC = observer(() => {
           )}
           {successfulSubmit && (
             <div>
-              <div className="text-center mb-2 forgot--check--icon">
+              <div className="text-center mb-2 forgot-password__check-icon">
                 <i className="pi pi-check-circle"></i>
               </div>
-              <div className="forgot__message--success">
+              <div className="forgot-password__message--success">
                 <h2>Forgot Password</h2>
                 <p>
                   If provided email is a registered email ID on Quizer, you will
@@ -135,7 +140,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
                   your password. In case you didn't receive this email, you need
                   to create a new account{" "}
                   <span
-                    className="forgot__span-login"
+                    className="forgot-password__span-login"
                     onClick={() => navigate("/register")}
                   >
                     here
@@ -145,7 +150,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
               </div>
               <Button
                 label="Log In"
-                className="forgot__button-reset mt-3"
+                className="forgot-password__button-reset mt-3"
                 onClick={() => navigate("/login")}
               />
             </div>

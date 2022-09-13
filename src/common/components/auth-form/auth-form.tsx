@@ -1,13 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  onAuthStateChanged,
-} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -15,11 +6,10 @@ import { Checkbox } from "primereact/checkbox";
 
 import logo from "../../../common/assets/Logo.png";
 import "./login.scss";
-import { ColloredCircles } from "../collored-circles/collored-circles";
 
-interface CardProps {}
+interface AuthFormProps {}
 
-export const Card: React.FC<CardProps> = () => {
+export const AuthForm: React.FC<AuthFormProps> = () => {
   const navigate = useNavigate();
 
   const [checked, setChecked] = useState(false);

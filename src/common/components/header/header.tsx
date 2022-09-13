@@ -9,22 +9,16 @@ const navItems = [
     id: 1,
     title: "Home",
     path: "/",
-    nName: "navbar--item",
-    sName: "sidebar--item",
   },
   {
     id: 2,
     title: "Profile",
     path: "/profile",
-    nName: "navbar--item",
-    sName: "sidebar--item",
   },
   {
     id: 3,
     title: "Logout",
     path: "/login",
-    nName: "navbar--item",
-    sName: "sidebar--item",
   },
 ];
 interface HeaderProps {}
@@ -33,14 +27,14 @@ export const Header: React.FC<HeaderProps> = ({}) => {
   return (
     <>
       <nav className="navbar">
-        <div className="flex navbar--wrapper">
-          <Link to="/" className="navbar--logo">
+        <div className="flex navbar__wrapper">
+          <Link to="/" className="navbar__logo">
             <img src={logo} alt="" />
           </Link>
-          <ul className="navbar--items">
+          <ul className="navbar__items">
             {navItems.map((item) => {
               return (
-                <li key={item.id} className={item.nName}>
+                <li key={item.id} className="navbar__item">
                   <Link to={item.path}>
                     <span>{item.title}</span>
                   </Link>
