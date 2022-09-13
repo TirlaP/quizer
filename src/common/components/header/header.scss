@@ -9,18 +9,18 @@
   align-items: center;
   justify-content: center;
 
-  &__wrapper {
+  .navbar__wrapper {
     width: 75%;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
 
-  &__logo {
+  .navbar__logo {
     width: 130.29px;
   }
 
-  &__items {
+  .navbar__items {
     width: 140px;
     display: flex;
     flex-direction: row;
@@ -28,18 +28,18 @@
     justify-content: flex-end;
     padding: 0px;
     gap: 8px;
+
+    a {
+      text-decoration: none;
+      color: #272022;
+      font-weight: 600;
+      font-size: 17px;
+      line-height: 32px;
+      cursor: pointer;
+    }
   }
 
-  &__items a {
-    text-decoration: none;
-    color: #272022;
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 32px;
-    cursor: pointer;
-  }
-
-  &__item {
+  .navbar__item {
     list-style: none;
     margin-left: 2rem;
   }
