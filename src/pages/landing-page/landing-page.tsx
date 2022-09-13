@@ -10,19 +10,15 @@ import { useNavigate } from "react-router-dom";
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState<object | null>(null);
-
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
-  }, []);
-
   return (
-    <div className="landing--page card--center align-items-center">
-      <div className="landing--container">
+    <div className="landing-page card--center align-items-center">
+      <div className="landing-page__container">
         <img src={logo} alt="logo" className="logo" />
-        <div className="landing--content">
-          <h1 className="landing--title text-left">Create your quiz today</h1>
-          <p className="landing--subtitle text-left">
+        <div className="landing-page__content">
+          <h1 className="landing-page__title text-left">
+            Create your quiz today
+          </h1>
+          <p className="landing-page__subtitle text-left">
             Create a quiz that engages students, generates leads or promotes
             your brand.
           </p>
@@ -30,13 +26,13 @@ export const LandingPage: React.FC = () => {
             label="Start now"
             icon="pi pi-arrow-right"
             iconPos="right"
-            className="landing--button"
+            className="landing-page__button"
             onClick={() => navigate("/login")}
           />
         </div>
       </div>
-      <div className="landing--image--container">
-        <img src={rocket} alt="sally rocket" className="landing--photo" />
+      <div className="landing-page__image-container">
+        <img src={rocket} alt="sally rocket" className="landing-page__photo" />
       </div>
       <ColloredCircles />
     </div>
