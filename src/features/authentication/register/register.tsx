@@ -42,9 +42,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
         formValues.email,
         formValues.password
       );
-      const addUserRole = httpsCallable(functions, "addUserRole");
-      addUserRole({
+      const addAdminRole = httpsCallable(functions, "addAdminRole");
+      addAdminRole({
         email: formValues.email,
+        isAdmin: false,
       }).then((result) => {
         console.log(result);
       });

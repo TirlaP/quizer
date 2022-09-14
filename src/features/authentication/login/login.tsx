@@ -53,6 +53,7 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
           formValues.password
         );
         localStorage.setItem("authenticated", JSON.stringify(true));
+        console.log(user);
         navigate("/homepage");
       } catch (error: any) {
         console.log(error.message);
@@ -134,7 +135,6 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
           currentUser.getIdTokenResult().then((idTokenResult) => {
             const isAdmin = !!idTokenResult.claims.admin;
             user = { ...currentUser, isAdmin };
-
             localStorage.setItem("user", JSON.stringify(user));
             setUser(user);
           });
