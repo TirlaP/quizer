@@ -5,7 +5,6 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
@@ -14,15 +13,11 @@ import { Checkbox } from "primereact/checkbox";
 
 import logo from "../../../common/assets/Logo.png";
 import "./login.scss";
-import {
-  auth,
-  functions,
-  httpsCallable,
-} from "../../../config/firebase-config";
+import { auth } from "../../../config/firebase-config";
 import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
 
-// import { getErrors } from "../../../common/services/util-service";
+import { getErrors } from "../../../common/services/util-service";
 interface LoginFormProps {
   loginStore: LoginStoreImplementation;
 }
