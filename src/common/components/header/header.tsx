@@ -8,24 +8,20 @@ import "./header.scss";
 import logo from "../../../common/assets/Logo-red.png";
 import { Button } from "primereact/button";
 
+import { LoginStore } from "../../../features/authentication/login/store/LoginStore";
+import { observer } from "mobx-react-lite";
+
 interface HeaderProps {}
 
-export const Header: React.FC<HeaderProps> = ({}) => {
+export const Header: React.FC<HeaderProps> = observer(() => {
+  const { isAuthenticated, user } = LoginStore.login;
+
   const navigate = useNavigate();
-
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  useEffect(() => {
-    const isAuth = JSON.parse(localStorage.getItem("authenticated") || "false");
-
-    setIsAuthenticated(isAuth);
-  }, []);
 
   const logout = async () => {
     await signOut(auth);
-    localStorage.setItem("authenticated", JSON.stringify(false));
-    localStorage.removeItem("user");
+    navigate("/login");
+    LoginStore.logout();
   };
 
   return (
@@ -81,4 +77,4 @@ export const Header: React.FC<HeaderProps> = ({}) => {
       </nav>
     </>
   );
-};
+});

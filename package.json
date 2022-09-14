@@ -14,6 +14,8 @@
     "firebase": "^9.9.4",
     "firebase-tools": "^11.9.0",
     "mobx": "^6.6.1",
+    "mobx-persist": "^0.4.1",
+    "mobx-persist-store": "^1.1.2",
     "mobx-react": "^7.5.2",
     "mobx-react-lite": "^3.4.0",
     "npx": "^10.2.2",

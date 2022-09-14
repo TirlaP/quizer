@@ -7,7 +7,7 @@ import "./no-quizzes.scss";
 interface NoQuizzesProps {}
 
 export const NoQuizzes: React.FC<NoQuizzesProps> = ({}) => {
-  const footer = (
+  const Footer = (
     <span>
       <Button
         label="Create quiz"
@@ -28,7 +28,7 @@ export const NoQuizzes: React.FC<NoQuizzesProps> = ({}) => {
           </p>
         </div>
         <div className="card--center mt-6">
-          <Card title="No quizzes" footer={footer} className="no-quizzes__card">
+          <Card title="No quizzes" footer={Footer} className="no-quizzes__card">
             <p
               className="m-0 no-quizzes__small-text"
               style={{ lineHeight: "1.5" }}
