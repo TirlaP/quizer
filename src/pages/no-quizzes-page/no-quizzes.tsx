@@ -7,7 +7,6 @@ import "./no-quizzes.scss";
 interface NoQuizzesProps {}
 
 export const NoQuizzes: React.FC<NoQuizzesProps> = ({}) => {
-  const header = <img alt="Card" src="images/usercard.png" />;
   const footer = (
     <span>
       <Button
