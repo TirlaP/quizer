@@ -1,3 +1,4 @@
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -39,9 +40,12 @@ const app = initializeApp(firebaseConfig);
 // init services
 const db = getFirestore();
 const auth = getAuth(app);
+const functions = getFunctions(app);
 
 export {
   db,
+  functions,
+  httpsCallable,
   collection,
   getDocs,
   addDoc,

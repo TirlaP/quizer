@@ -14,7 +14,11 @@ import { Checkbox } from "primereact/checkbox";
 
 import logo from "../../../common/assets/Logo.png";
 import "./login.scss";
-import { auth } from "../../../config/firebase-config";
+import {
+  auth,
+  functions,
+  httpsCallable,
+} from "../../../config/firebase-config";
 import { LoginStoreImplementation } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
 
@@ -49,6 +53,7 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
           formValues.password
         );
         localStorage.setItem("authenticated", JSON.stringify(true));
+        console.log(user);
         navigate("/homepage");
       } catch (error: any) {
         console.log(error.message);
@@ -82,11 +87,6 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
       } catch (error: any) {
         console.log(error.message);
       }
-    };
-
-    const logout = async () => {
-      await signOut(auth);
-      localStorage.setItem("authenticated", JSON.stringify(false));
     };
 
     const handleChange = (e: any) => {
@@ -130,8 +130,15 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
 
     useEffect(() => {
       onAuthStateChanged(auth, (currentUser) => {
-        localStorage.setItem("user", JSON.stringify(currentUser));
-        setUser(currentUser);
+        let user;
+        if (currentUser) {
+          currentUser.getIdTokenResult().then((idTokenResult) => {
+            const isAdmin = !!idTokenResult.claims.admin;
+            user = { ...currentUser, isAdmin };
+            localStorage.setItem("user", JSON.stringify(user));
+            setUser(user);
+          });
+        }
       });
     }, []);
 
@@ -256,7 +263,6 @@ export const LoginForm: React.FC<LoginFormProps> = observer(
                   </span>
                 </p>
               </div>
-              {user && <Button label="Sign Out" onClick={logout} />}
             </div>
           </div>
         </div>

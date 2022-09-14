@@ -28,19 +28,35 @@
     justify-content: flex-end;
     padding: 0px;
     gap: 8px;
-  }
 
-  .navbar__items a {
-    text-decoration: none;
-    color: #272022;
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 32px;
-    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #272022;
+      font-weight: 600;
+      font-size: 17px;
+      line-height: 32px;
+      cursor: pointer;
+    }
   }
 
   .navbar__item {
     list-style: none;
     margin-left: 2rem;
+  }
+
+  .navbar__button-quiz {
+    opacity: 0.9;
+    width: 125px;
+    height: 36px;
+
+    /* Main color */
+
+    background: #9141f6;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
