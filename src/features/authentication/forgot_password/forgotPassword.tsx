@@ -32,7 +32,6 @@ export const ForgotPasswordForm: React.FC = observer(() => {
   // Return it to be used for a better user experience.
   const getErrors = (value: any) => {
     const validationErrors = initialValues;
-    console.log(validationErrors);
 
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
     if (!value) {
@@ -40,7 +39,6 @@ export const ForgotPasswordForm: React.FC = observer(() => {
     } else if (!regex.test(value)) {
       validationErrors.email = "This is not a valid email format!";
     }
-    console.log(validationErrors === initialValues);
     return validationErrors;
   };
 
