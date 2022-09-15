@@ -10,12 +10,6 @@ import { Header } from "../../common/components/header/header";
 interface CreateQuizProps {}
 
 export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
-  const categories = [
-    { name: "Accounting", key: "A" },
-    { name: "Marketing", key: "M" },
-    { name: "Production", key: "P" },
-    { name: "Research", key: "R" },
-  ];
   const [answer, setAnswer] = useState(null);
 
   const HeaderCard1 = (
