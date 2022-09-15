@@ -52,22 +52,11 @@ export const LoginForm: React.FC = observer(() => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
+  const signInWithMedia = async (mediaProvider: any) => {
+    const provider = new mediaProvider();
     try {
-      await signInWithPopup(auth, provider);
-      localStorage.setItem("authenticated", JSON.stringify(true));
-      navigate("/homepage");
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  };
-
-  const signInWithFacebook = async () => {
-    const provider = new FacebookAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      localStorage.setItem("authenticated", JSON.stringify(true));
+      const user = await signInWithPopup(auth, provider);
+      LoginStore.loginSucces(user);
       navigate("/homepage");
     } catch (error: any) {
       console.log(error.message);
@@ -218,13 +207,13 @@ export const LoginForm: React.FC = observer(() => {
                   label="Google"
                   icon="pi pi-google"
                   className="login__button-media google"
-                  onClick={signInWithGoogle}
+                  onClick={() => signInWithMedia(GoogleAuthProvider)}
                 />
                 <Button
                   label="Facebook"
                   icon="pi pi-facebook"
                   className="login__button-media"
-                  onClick={signInWithFacebook}
+                  onClick={() => signInWithMedia(FacebookAuthProvider)}
                 />
               </div>
               <p>
