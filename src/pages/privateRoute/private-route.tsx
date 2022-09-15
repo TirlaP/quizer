@@ -1,5 +1,6 @@
-import React from "react";
+import { observer } from "mobx-react-lite";
 import { Navigate } from "react-router-dom";
+import { LoginStore } from "../../features/authentication/login/store/LoginStore";
 
 export type ProtectedRouteProps = {
   isAuthenticated: boolean;
@@ -7,14 +8,12 @@ export type ProtectedRouteProps = {
   component: JSX.Element;
 };
 
-export default function PrivateRoute({
-  isAuthenticated,
-  authenticationPath,
-  component,
-}: ProtectedRouteProps) {
-  return isAuthenticated ? (
-    component
-  ) : (
-    <Navigate to={{ pathname: authenticationPath }} />
-  );
-}
+export const PrivateRoute = observer(
+  ({ isAuthenticated, authenticationPath, component }: ProtectedRouteProps) => {
+    return isAuthenticated ? (
+      component
+    ) : (
+      <Navigate to={{ pathname: authenticationPath }} />
+    );
+  }
+);

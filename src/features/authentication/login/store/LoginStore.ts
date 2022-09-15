@@ -3,7 +3,7 @@ import { action, makeObservable, observable } from "mobx";
 interface LoginData {
   isLoading: boolean;
   isAuthenticated: boolean;
-  user: object;
+  user: any;
 }
 
 export class LoginStoreImplementation {

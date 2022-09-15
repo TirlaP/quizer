@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { signOut } from "firebase/auth";
 import { auth } from "../../../config/firebase-config";
@@ -8,15 +8,20 @@ import "./header.scss";
 import logo from "../../../common/assets/Logo-red.png";
 import { Button } from "primereact/button";
 
+import { LoginStore } from "../../../features/authentication/login/store/LoginStore";
+import { observer } from "mobx-react-lite";
+
 interface HeaderProps {}
 
-export const Header: React.FC<HeaderProps> = ({}) => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+export const Header: React.FC<HeaderProps> = observer(() => {
+  const { isAuthenticated, user } = LoginStore.login;
+
+  const navigate = useNavigate();
 
   const logout = async () => {
     await signOut(auth);
-    localStorage.setItem("authenticated", JSON.stringify(false));
-    // localStorage.removeItem("user");
+    navigate("/login");
+    LoginStore.logout();
   };
 
   return (
@@ -44,10 +49,27 @@ export const Header: React.FC<HeaderProps> = ({}) => {
                 </li>
               </>
             )}
-            <li className="navbar__item" onClick={logout}>
-              <Link to="/login" className="flex align-items-center gap-2">
-                <span>{user.isAdmin ? "Admin" : "User"}</span>
-                <i className="pi pi-sign-out"></i>
+            <li
+              className="navbar__item"
+              onClick={
+                isAuthenticated
+                  ? logout
+                  : () => {
+                      navigate("/login");
+                    }
+              }
+            >
+              <Link to="/login">
+                {isAuthenticated ? (
+                  <div className="flex align-items-center gap-2">
+                    <span>{user.isAdmin ? "Admin" : "User"}</span>
+                    <i className="pi pi-sign-out"></i>
+                  </div>
+                ) : (
+                  <div>
+                    <span>Login</span>
+                  </div>
+                )}
               </Link>
             </li>
           </ul>
@@ -55,4 +77,4 @@ export const Header: React.FC<HeaderProps> = ({}) => {
       </nav>
     </>
   );
-};
+});

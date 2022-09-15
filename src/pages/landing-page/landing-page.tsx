@@ -6,8 +6,10 @@ import logo from "../../common/assets/Logo-red.png";
 import "./landing-page.scss";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { LoginStore } from "../../features/authentication/login/store/LoginStore";
 
-export const LandingPage: React.FC = () => {
+export const LandingPage: React.FC = observer(() => {
   const navigate = useNavigate();
 
   return (
@@ -37,4 +39,4 @@ export const LandingPage: React.FC = () => {
       <ColloredCircles />
     </div>
   );
-};
+});

@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { LoginStore } from "./features/authentication/login/store/LoginStore";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -17,7 +16,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App loginStore={LoginStore} />
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );
