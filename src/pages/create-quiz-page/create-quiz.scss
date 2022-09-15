@@ -1,0 +1,133 @@
+.create-quiz {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .create-quiz__content-wrapper {
+    width: 75%;
+  }
+
+  .create-quiz__welcome {
+    text-align: left;
+  }
+
+  .create-quiz__button-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+  .create-quiz__button-create {
+    opacity: 0.9;
+    width: 232px;
+    height: 56px;
+
+    /* Main color */
+
+    background: #9141f6;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .create-quiz__button-cancel {
+    opacity: 0.8;
+    width: 157px;
+    height: 56px;
+
+    padding: 12px 48px;
+    gap: 12px;
+    color: #272022;
+
+    background: #ffffff;
+    /* Grey / Medium grey */
+
+    border: 3px solid #666273;
+    border-radius: 8px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .create-quiz__title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .create-quiz__title {
+    text-align: left;
+    margin: 0;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+
+    color: #272022;
+  }
+  .create-quiz__subtitle {
+    text-align: left;
+    margin-top: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #666273;
+  }
+
+  .create-quiz__input-label {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+
+    color: #3e3e3e;
+  }
+  .create-quiz__input {
+    width: 349px;
+    height: 56px;
+
+    padding: 16px;
+    gap: 10px;
+
+    background: #f9f8f9;
+    border: 1px solid #d1cedc;
+    border-radius: 8px;
+  }
+
+  .create-quiz__card {
+    width: 1040px;
+    height: 248px;
+
+    padding: 36px 24px;
+    gap: 32px;
+
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05), 0px 8px 8px rgba(0, 0, 0, 0.05),
+      0px 1px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+  }
+  .create-quiz__small-text {
+    color: #666273;
+  }
+
+  .p-card-body {
+    padding: 0;
+  }
+
+  @media screen and (max-height: 1023xpx), (max-width: 1023px) {
+    .create-quiz__card {
+      width: 588px;
+      height: 338px;
+    }
+
+    .create-quiz__button-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .create-quiz__button-create {
+      width: 157px;
+    }
+  }
+}

@@ -1,18 +1,22 @@
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./no-quizzes.scss";
 
 interface NoQuizzesProps {}
 
 export const NoQuizzes: React.FC<NoQuizzesProps> = ({}) => {
+  const navigate = useNavigate();
+
   const Footer = (
     <span>
       <Button
         label="Create quiz"
         icon="pi pi-plus"
         className="no-quizzes__button-create"
+        onClick={() => navigate("/create-quiz")}
       />
     </span>
   );

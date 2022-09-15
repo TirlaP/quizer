@@ -45,7 +45,11 @@ export const Header: React.FC<HeaderProps> = observer(() => {
                   </Link>
                 </li>
                 <li className="navbar__item">
-                  <Button label="Create Quiz" className="navbar__button-quiz" />
+                  <Button
+                    label="Create Quiz"
+                    className="navbar__button-quiz"
+                    onClick={() => navigate("/create-quiz")}
+                  />
                 </li>
               </>
             )}
