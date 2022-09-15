@@ -16,8 +16,7 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
     { name: "Production", key: "P" },
     { name: "Research", key: "R" },
   ];
-  const [city, setCity] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(categories[1]);
+  const [answer, setAnswer] = useState(null);
 
   const HeaderCard1 = (
     <div className="flex flex-row align-items-center justify-content-between">
@@ -114,6 +113,7 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
                 placeholder="What is your question?"
               />
             </div>
+
             <div className="create-quiz__answer">
               <div className="create-quiz__input-label">Answer 01</div>
               <div className="flex flex-row align-items-center gap-3">
@@ -126,15 +126,16 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
               </div>
               <div className="field-radiobutton mt-2">
                 <RadioButton
-                  inputId="city2"
-                  name="city"
-                  value="Los Angeles"
-                  onChange={(e) => setCity(e.value)}
-                  checked={city === "Los Angeles"}
+                  inputId="answer1"
+                  name="answer"
+                  value="Answer1"
+                  onChange={(e) => setAnswer(e.value)}
+                  checked={answer === "Answer1"}
                 />
-                <label htmlFor="city2">This is the correct answer</label>
+                <label htmlFor="answer1">This is the correct answer</label>
               </div>
             </div>
+
             <div className="create-quiz__answer">
               <div className="create-quiz__input-label">Answer 02</div>
               <div className="flex flex-row align-items-center gap-3">
@@ -147,13 +148,13 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
               </div>
               <div className="field-radiobutton mt-2">
                 <RadioButton
-                  inputId="city1"
-                  name="city"
-                  value="Chicago"
-                  onChange={(e) => setCity(e.value)}
-                  checked={city === "Chicago"}
+                  inputId="answer2"
+                  name="answer"
+                  value="Answer2"
+                  onChange={(e) => setAnswer(e.value)}
+                  checked={answer === "Answer2"}
                 />
-                <label htmlFor="city1">This is the correct answer</label>
+                <label htmlFor="answer2">This is the correct answer</label>
               </div>
             </div>
 
