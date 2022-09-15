@@ -6,12 +6,13 @@ import { Dropdown } from "primereact/dropdown";
 import { Card } from "primereact/card";
 import "./create-quiz.scss";
 import { Header } from "../../common/components/header/header";
+import { CreateQuizFirstCard } from "../../features/create-quiz/create-quiz-first-card/create-quiz-first-card";
+import { CreateQuizSecondCard } from "../../features/create-quiz/create-quiz-second-card/create-quiz-second-card";
+import { QuestionList } from "../../features/create-quiz/create-quiz-question-list/question-list";
 
 interface CreateQuizProps {}
 
 export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
-  const [answer, setAnswer] = useState(null);
-
   const HeaderCard1 = (
     <div className="flex flex-row align-items-center justify-content-between">
       <div className="create-quiz__title-wrapper">
@@ -84,96 +85,12 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
   return (
     <div className="create-quiz flex flex-column">
       <Header />
-      <div className="card--center mt-6">
-        <Card
-          header={HeaderCard1}
-          footer={FooterCard1}
-          className="create-quiz__first-card create-quiz__common-card-style"
-        ></Card>
-      </div>
+      <CreateQuizFirstCard />
 
       <div className="flex flex-row card--center mt-6 gap-3">
-        <Card
-          header={HeaderCard2}
-          footer={FooterCard2}
-          className="create-quiz__second-card create-quiz__common-card-style"
-        >
-          <div className="flex flex-column align-items-start create-quiz__answers-wrapper">
-            <div className="create-quiz__answer">
-              <div className="create-quiz__input-label">Question</div>
-              <InputText
-                style={{ width: "640px" }}
-                className="create-quiz__input"
-                placeholder="What is your question?"
-              />
-            </div>
+        <CreateQuizSecondCard />
 
-            <div className="create-quiz__answer">
-              <div className="create-quiz__input-label">Answer 01</div>
-              <div className="flex flex-row align-items-center gap-3">
-                <InputText
-                  style={{ width: "312px" }}
-                  className="create-quiz__input"
-                  placeholder="Enter your answer"
-                />
-                <i className="pi pi-trash"></i>
-              </div>
-              <div className="field-radiobutton mt-2">
-                <RadioButton
-                  inputId="answer1"
-                  name="answer"
-                  value="Answer1"
-                  onChange={(e) => setAnswer(e.value)}
-                  checked={answer === "Answer1"}
-                />
-                <label htmlFor="answer1">This is the correct answer</label>
-              </div>
-            </div>
-
-            <div className="create-quiz__answer">
-              <div className="create-quiz__input-label">Answer 02</div>
-              <div className="flex flex-row align-items-center gap-3">
-                <InputText
-                  style={{ width: "312px" }}
-                  className="create-quiz__input"
-                  placeholder="Enter your answer"
-                />
-                <i className="pi pi-trash"></i>
-              </div>
-              <div className="field-radiobutton mt-2">
-                <RadioButton
-                  inputId="answer2"
-                  name="answer"
-                  value="Answer2"
-                  onChange={(e) => setAnswer(e.value)}
-                  checked={answer === "Answer2"}
-                />
-                <label htmlFor="answer2">This is the correct answer</label>
-              </div>
-            </div>
-
-            <div className="create-quiz__answer">
-              <Button
-                style={{
-                  width: "152px",
-                  height: "40px",
-                  padding: "4px 24px",
-                  color: "#272022",
-                }}
-                label="Add answer"
-                className="create-quiz__button-cancel"
-              />
-            </div>
-          </div>
-        </Card>
-
-        <div className="flex flex-column align-items-start">
-          <h3 className="create-quiz__list-title">Quiz questions</h3>
-          <Card
-            header={HeaderCard3}
-            className="create-quiz__third-card create-quiz__common-card-style"
-          ></Card>
-        </div>
+        <QuestionList />
       </div>
     </div>
   );
