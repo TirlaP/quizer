@@ -4,12 +4,18 @@
   align-items: center;
   justify-content: center;
 
-  .create-quiz__content-wrapper {
-    width: 75%;
+  .create-quiz__footer-buttons {
+    margin: 0px -16px;
   }
 
-  .create-quiz__welcome {
-    text-align: left;
+  .create-quiz__dropdown {
+    width: 221px;
+    height: 56px;
+    padding: 8px;
+
+    background: #f9f8f9;
+    border: 1px solid #d1cedc;
+    border-radius: 8px;
   }
 
   .create-quiz__button-wrapper {
@@ -21,8 +27,6 @@
     opacity: 0.9;
     width: 232px;
     height: 56px;
-
-    /* Main color */
 
     background: #9141f6;
     border: 3px solid rgba(0, 0, 0, 0.2);
@@ -42,7 +46,6 @@
     color: #272022;
 
     background: #ffffff;
-    /* Grey / Medium grey */
 
     border: 3px solid #666273;
     border-radius: 8px;
@@ -57,7 +60,6 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
   .create-quiz__title {
     text-align: left;
     margin: 0;
@@ -81,6 +83,7 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
+    margin-bottom: 8px;
 
     color: #3e3e3e;
   }
@@ -96,10 +99,17 @@
     border-radius: 8px;
   }
 
-  .create-quiz__card {
-    width: 1040px;
-    height: 248px;
+  .create-quiz__answers-wrapper {
+    gap: 32px;
+    margin-left: -16px;
+  }
+  .create-quiz__answer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
+  .create-quiz__common-card-style {
     padding: 36px 24px;
     gap: 32px;
 
@@ -107,16 +117,42 @@
       0px 1px 4px rgba(0, 0, 0, 0.15);
     border-radius: 14px;
   }
-  .create-quiz__small-text {
-    color: #666273;
+
+  .create-quiz__first-card {
+    width: 1040px;
+    height: 248px;
   }
 
-  .p-card-body {
-    padding: 0;
+  .create-quiz__second-card {
+    width: 688px;
+    height: 700px;
+  }
+
+  .create-quiz__third-card {
+    width: 336px;
+    height: 112px;
+
+    padding: 24px;
+    gap: 16px;
+  }
+
+  .create-quiz__list-title {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+  .create-quiz__list-text {
+    margin: 0;
+  }
+
+  .p-dropdown-trigger-icon {
+    font-size: 10px;
+    padding: 3px 2px 2px 2px;
+    border: 1.5px solid #a6a6a6;
+    border-radius: 50%;
   }
 
   @media screen and (max-height: 1023xpx), (max-width: 1023px) {
-    .create-quiz__card {
+    .create-quiz__first-card {
       width: 588px;
       height: 338px;
     }
