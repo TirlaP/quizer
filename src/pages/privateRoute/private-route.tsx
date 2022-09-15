@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { LoginStore } from "../../features/authentication/login/store/LoginStore";
 
 export type ProtectedRouteProps = {
-  isAuthenticated: any;
+  isAuthenticated: boolean;
   authenticationPath: string;
   component: JSX.Element;
 };
