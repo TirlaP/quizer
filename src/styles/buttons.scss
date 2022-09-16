@@ -1,0 +1,114 @@
+.button {
+  .button__common-style {
+    opacity: 0.9;
+    height: 56px;
+
+    /* Main color */
+
+    background: #9141f6;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .button__landing-page {
+    z-index: 20;
+    width: 217px;
+
+    padding: 12px 48px;
+
+    .p-button-label {
+      font-size: 17px;
+      line-height: 32px;
+    }
+  }
+
+  .button__login-login {
+    width: 160px;
+  }
+
+  .button__login-media {
+    padding: 12px 48px;
+    gap: 12px;
+
+    width: 301px;
+    background: #ffffff;
+    border: 3px solid #9141f6;
+
+    .p-button-label {
+      color: #9141f6;
+    }
+    .p-button-icon {
+      color: blue;
+    }
+  }
+
+  .button__forgot-password {
+    width: 301px;
+    color: #fff;
+  }
+
+  .button__no-quizzes-create {
+    width: 232px;
+  }
+
+  .button__create-quiz-create {
+    width: 232px;
+  }
+
+  .button__create-quiz-save {
+    width: 138px;
+  }
+
+  .button__create-quiz-cancel {
+    width: 157px;
+
+    color: #272022;
+    background: #ffffff;
+    border: 3px solid #666273;
+  }
+
+  .button__create-quiz-add {
+    width: 152px;
+    height: 40px;
+    padding: 4px 24px;
+
+    color: #272022;
+    background: #ffffff;
+    border: 3px solid #666273;
+  }
+
+  .button__create-quiz-remove {
+    width: 167px;
+
+    color: red;
+    background: #ffffff;
+    border: 3px solid red;
+  }
+
+  .button__navbar-create {
+    width: 125px;
+    height: 36px;
+  }
+
+  @media screen and (max-height: 900px), (max-width: 900px) {
+    .button__login-login {
+      width: 130px;
+      height: 46px;
+    }
+
+    .button__login-media {
+      padding: 15px;
+      width: 143px;
+    }
+  }
+
+  @media screen and (max-height: 1023px), (max-width: 1023px) {
+    .button__create-quiz-create {
+      width: 157px;
+    }
+  }
+}

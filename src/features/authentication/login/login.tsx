@@ -12,6 +12,7 @@ import { Checkbox } from "primereact/checkbox";
 
 import logo from "../../../common/assets/Logo.png";
 import "./login.scss";
+import "../../../styles/buttons.scss";
 import { auth } from "../../../config/firebase-config";
 import { LoginStore } from "./store/LoginStore";
 import { observer } from "mobx-react-lite";
@@ -117,7 +118,7 @@ export const LoginForm: React.FC = observer(() => {
           </div>
 
           <div className="align-items-center">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="button">
               <div className="flex flex-column align-items-start p-input-icon-right">
                 <label
                   htmlFor="email"
@@ -195,24 +196,27 @@ export const LoginForm: React.FC = observer(() => {
                 </span>
               </div>
 
-              <Button label="Log In" className="login__button-login" />
+              <Button
+                label="Log In"
+                className="button__common-style button__login-login"
+              />
             </form>
             <div className="login__divider">
               <div className="login__or-wrapper">OR</div>
             </div>
 
             <div className=" mt-3 media__wrapper__column">
-              <div className="media__wrapper__row">
+              <div className="media__wrapper__row button">
                 <Button
                   label="Google"
                   icon="pi pi-google"
-                  className="login__button-media google"
+                  className="button__common-style button__login-media google"
                   onClick={() => signInWithMedia(GoogleAuthProvider)}
                 />
                 <Button
                   label="Facebook"
                   icon="pi pi-facebook"
-                  className="login__button-media"
+                  className="button__common-style button__login-media"
                   onClick={() => signInWithMedia(FacebookAuthProvider)}
                 />
               </div>

@@ -18,22 +18,6 @@
     text-align: left;
   }
 
-  .no-quizzes__button-create {
-    opacity: 0.9;
-    width: 232px;
-    height: 56px;
-
-    /* Main color */
-
-    background: #9141f6;
-    border: 3px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
   .no-quizzes__card {
     width: 688px;
     height: 318px;

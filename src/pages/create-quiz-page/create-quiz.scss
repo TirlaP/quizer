@@ -1,0 +1,135 @@
+.create-quiz {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .create-quiz__footer-buttons {
+    margin: 0px -16px;
+  }
+
+  .create-quiz__dropdown {
+    width: 221px;
+    height: 56px;
+    padding: 8px;
+
+    background: #f9f8f9;
+    border: 1px solid #d1cedc;
+    border-radius: 8px;
+  }
+
+  .create-quiz__button-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .create-quiz__title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .create-quiz__title {
+    text-align: left;
+    margin: 0;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+
+    color: #272022;
+  }
+  .create-quiz__subtitle {
+    text-align: left;
+    margin-top: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #666273;
+  }
+
+  .create-quiz__input-label {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    margin-bottom: 8px;
+
+    color: #3e3e3e;
+  }
+  .create-quiz__input {
+    width: 349px;
+    height: 56px;
+
+    padding: 16px;
+    gap: 10px;
+
+    background: #f9f8f9;
+    border: 1px solid #d1cedc;
+    border-radius: 8px;
+  }
+
+  .create-quiz__answers-wrapper {
+    gap: 32px;
+    margin-left: -16px;
+  }
+  .create-quiz__answer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .create-quiz__common-card-style {
+    padding: 36px 24px;
+    gap: 32px;
+
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05), 0px 8px 8px rgba(0, 0, 0, 0.05),
+      0px 1px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+  }
+
+  .create-quiz__first-card {
+    width: 1040px;
+    height: 248px;
+  }
+
+  .create-quiz__second-card {
+    width: 688px;
+    height: 700px;
+  }
+
+  .create-quiz__third-card {
+    width: 336px;
+    height: 112px;
+
+    padding: 24px;
+    gap: 16px;
+  }
+
+  .create-quiz__list-title {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+  .create-quiz__list-text {
+    margin: 0;
+  }
+
+  .p-dropdown-trigger-icon {
+    font-size: 10px;
+    padding: 3px 2px 2px 2px;
+    border: 1.5px solid #a6a6a6;
+    border-radius: 50%;
+  }
+
+  @media screen and (max-height: 1023xpx), (max-width: 1023px) {
+    .create-quiz__first-card {
+      width: 588px;
+      height: 338px;
+    }
+
+    .create-quiz__button-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+}
