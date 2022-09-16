@@ -4,6 +4,7 @@ import { ColloredCircles } from "../../common/components/collored-circles/collor
 import rocket from "../../common/assets/rocket.png";
 import logo from "../../common/assets/Logo-red.png";
 import "./landing-page.scss";
+import "../../styles/buttons.scss";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -24,13 +25,15 @@ export const LandingPage: React.FC = observer(() => {
             Create a quiz that engages students, generates leads or promotes
             your brand.
           </p>
-          <Button
-            label="Start now"
-            icon="pi pi-arrow-right"
-            iconPos="right"
-            className="landing-page__button"
-            onClick={() => navigate("/login")}
-          />
+          <div className="button">
+            <Button
+              label="Start now"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              className="button__common-style button__landing-page"
+              onClick={() => navigate("/login")}
+            />
+          </div>
         </div>
       </div>
       <div className="landing-page__image-container">
