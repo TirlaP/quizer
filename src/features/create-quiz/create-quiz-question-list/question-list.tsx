@@ -19,6 +19,7 @@ export const QuestionList: React.FC<QuestionListProps> = ({}) => {
       {list.map((question, index) => (
         <div key={index}>
           <QuestionItem
+            questionName={`Question ${index + 1}`}
             handleClick={removeQuestion}
             id={index}
             answers={Math.floor(Math.random() * 10) + 1}

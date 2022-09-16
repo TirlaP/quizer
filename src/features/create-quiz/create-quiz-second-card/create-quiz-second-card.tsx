@@ -4,11 +4,26 @@ import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { useState } from "react";
 import { RadioButton } from "primereact/radiobutton";
+import { AnswerItem } from "./components/answer-item";
 
 export const CreateQuizSecondCard: React.FC = () => {
   const [answer, setAnswer] = useState(null);
+  const [list, setList] = useState([1, 2]);
 
-  const HeaderCard2 = (
+  const addAnswer = () => {
+    const newList = list;
+    newList.push(list.length);
+    setList([...newList]);
+  };
+
+  const removeAnswer = (index: number) => {
+    let newList = list;
+    newList.splice(index, 1);
+    console.log(`Deleted item ${index}`);
+    setList([...newList]);
+  };
+
+  const QuestionHeaderCard = (
     <div className="flex flex-row align-items-center justify-content-between">
       <div className="create-quiz__title-wrapper">
         <h2 className="create-quiz__title">New question</h2>
@@ -16,7 +31,7 @@ export const CreateQuizSecondCard: React.FC = () => {
       <Dropdown className="create-quiz__dropdown" placeholder="Question type" />
     </div>
   );
-  const FooterCard2 = (
+  const QuestionFooterCard = (
     <div className="flex flex-row justify-content-between create-quiz__footer-buttons">
       <div>
         <Button
@@ -38,8 +53,8 @@ export const CreateQuizSecondCard: React.FC = () => {
 
   return (
     <Card
-      header={HeaderCard2}
-      footer={FooterCard2}
+      header={QuestionHeaderCard}
+      footer={QuestionFooterCard}
       className="create-quiz__second-card create-quiz__common-card-style"
     >
       <div className="flex flex-column align-items-start create-quiz__answers-wrapper">
@@ -52,49 +67,32 @@ export const CreateQuizSecondCard: React.FC = () => {
           />
         </div>
 
-        <div className="create-quiz__answer">
-          <div className="create-quiz__input-label">Answer 01</div>
-          <div className="flex flex-row align-items-center gap-3">
-            <InputText
-              style={{ width: "312px" }}
-              className="create-quiz__input"
-              placeholder="Enter your answer"
+        {list.map((answer, index) => (
+          <div key={index}>
+            <AnswerItem
+              checked={true}
+              value={"Answer1"}
+              name={"answer"}
+              inputId={"answer1"}
+              index={index}
+              handleClick={removeAnswer}
             />
-            <i className="pi pi-trash"></i>
           </div>
-          <div className="field-radiobutton mt-2">
-            <RadioButton
-              inputId="answer1"
-              name="answer"
-              value="Answer1"
-              onChange={(e) => setAnswer(e.value)}
-              checked={answer === "Answer1"}
-            />
-            <label htmlFor="answer1">This is the correct answer</label>
-          </div>
-        </div>
-
-        <div className="create-quiz__answer">
-          <div className="create-quiz__input-label">Answer 02</div>
-          <div className="flex flex-row align-items-center gap-3">
-            <InputText
-              style={{ width: "312px" }}
-              className="create-quiz__input"
-              placeholder="Enter your answer"
-            />
-            <i className="pi pi-trash"></i>
-          </div>
-          <div className="field-radiobutton mt-2">
-            <RadioButton
-              inputId="answer2"
-              name="answer"
-              value="Answer2"
-              onChange={(e) => setAnswer(e.value)}
-              checked={answer === "Answer2"}
-            />
-            <label htmlFor="answer2">This is the correct answer</label>
-          </div>
-        </div>
+        ))}
+        {/* <AnswerItem
+          checked={true}
+          value={"Answer1"}
+          name={"answer"}
+          inputId={"answer1"}
+          index={0}
+        />
+        <AnswerItem
+          checked={false}
+          value={"Answer2"}
+          name={"answer"}
+          inputId={"answer2"}
+          index={1}
+        /> */}
 
         <div className="create-quiz__answer">
           <Button
@@ -106,6 +104,7 @@ export const CreateQuizSecondCard: React.FC = () => {
             }}
             label="Add answer"
             className="create-quiz__button-cancel"
+            onClick={addAnswer}
           />
         </div>
       </div>

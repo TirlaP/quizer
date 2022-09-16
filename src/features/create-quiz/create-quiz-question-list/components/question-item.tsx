@@ -3,20 +3,22 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 
 interface QuestionItemProps {
+  questionName: string;
   handleClick: any;
   id: number;
   answers: number;
 }
 
 export const QuestionItem: React.FC<QuestionItemProps> = ({
+  questionName,
   handleClick,
   id,
   answers,
 }) => {
-  const HeaderCard3 = (
+  const QuestionListItemHeaderCard = (
     <div className="flex flex-column">
       <div className="flex flex-row align-items-center justify-content-between">
-        <h3 className="create-quiz__list-text">Untitled question</h3>
+        <h3 className="create-quiz__list-text">{questionName}</h3>
         <Button
           icon="pi pi-times"
           className="p-button-squared p-button-danger p-button-outlined"
@@ -35,7 +37,7 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
   );
   return (
     <Card
-      header={HeaderCard3}
+      header={QuestionListItemHeaderCard}
       className="create-quiz__third-card create-quiz__common-card-style mb-3"
     ></Card>
   );

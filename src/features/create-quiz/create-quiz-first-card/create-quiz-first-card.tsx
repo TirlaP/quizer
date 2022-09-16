@@ -4,7 +4,7 @@ import { Card } from "primereact/card";
 import React from "react";
 
 export const CreateQuizFirstCard: React.FC = () => {
-  const HeaderCard1 = (
+  const QuizHeaderCard = (
     <div className="flex flex-row align-items-center justify-content-between">
       <div className="create-quiz__title-wrapper">
         <h2 className="create-quiz__title">New quiz</h2>
@@ -18,7 +18,7 @@ export const CreateQuizFirstCard: React.FC = () => {
       </div>
     </div>
   );
-  const FooterCard1 = (
+  const QuizFooterCard = (
     <div className="flex flex-column align-items-start">
       <div className="create-quiz__input-label">Quiz name</div>
       <InputText className="create-quiz__input" placeholder="Enter quiz name" />
@@ -28,8 +28,8 @@ export const CreateQuizFirstCard: React.FC = () => {
   return (
     <div className="card--center mt-6">
       <Card
-        header={HeaderCard1}
-        footer={FooterCard1}
+        header={QuizHeaderCard}
+        footer={QuizFooterCard}
         className="create-quiz__first-card create-quiz__common-card-style"
       ></Card>
     </div>
