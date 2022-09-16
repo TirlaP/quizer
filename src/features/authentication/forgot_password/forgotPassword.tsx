@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 
 import logo from "../../../common/assets/Logo.png";
 import "./forgotPassword.scss";
+import "../../../styles/buttons.scss";
 
 import { observer } from "mobx-react-lite";
 import { auth } from "../../../config/firebase-config";
@@ -76,7 +77,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
             <img src={logo} alt="hyper" height={50} className="logo" />
           </div>
           {!successfulSubmit && (
-            <div className="align-items-center">
+            <div className="align-items-center button">
               <div className="flex flex-column align-items-start p-input-icon-right">
                 <label
                   htmlFor="email"
@@ -105,7 +106,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
 
               <Button
                 label="Send Reset Link"
-                className="forgot-password__button-reset mt-3"
+                className="button__common-style button__forgot-password mt-3"
                 onClick={handleSubmit}
               />
               <div className="forgot-password__divider">
@@ -126,7 +127,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
             </div>
           )}
           {successfulSubmit && (
-            <div>
+            <div className="button">
               <div className="text-center mb-2 forgot-password__check-icon">
                 <i className="pi pi-check-circle"></i>
               </div>
@@ -148,7 +149,7 @@ export const ForgotPasswordForm: React.FC = observer(() => {
               </div>
               <Button
                 label="Log In"
-                className="forgot-password__button-reset mt-3"
+                className="button__common-style button__forgot-password mt-3"
                 onClick={() => navigate("/login")}
               />
             </div>

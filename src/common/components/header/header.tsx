@@ -5,6 +5,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../config/firebase-config";
 
 import "./header.scss";
+import "../../../styles/buttons.scss";
+
 import logo from "../../../common/assets/Logo-red.png";
 import { Button } from "primereact/button";
 
@@ -44,10 +46,10 @@ export const Header: React.FC<HeaderProps> = observer(() => {
                     <span>Dashboard</span>
                   </Link>
                 </li>
-                <li className="navbar__item">
+                <li className="navbar__item button">
                   <Button
                     label="Create Quiz"
-                    className="navbar__button-quiz"
+                    className="button__common-style button__navbar-create"
                     onClick={() => navigate("/create-quiz")}
                   />
                 </li>

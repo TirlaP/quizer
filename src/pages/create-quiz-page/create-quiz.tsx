@@ -5,6 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Card } from "primereact/card";
 import "./create-quiz.scss";
+import "../../styles/buttons.scss";
 import { Header } from "../../common/components/header/header";
 
 interface CreateQuizProps {}
@@ -21,8 +22,14 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
         </p>
       </div>
       <div className="create-quiz__button-wrapper">
-        <Button label="Cancel" className="create-quiz__button-cancel" />
-        <Button label="Create quiz" className="create-quiz__button-create" />
+        <Button
+          label="Cancel"
+          className="button__common-style button__create-quiz-cancel"
+        />
+        <Button
+          label="Create quiz"
+          className="button__common-style button__create-quiz-create"
+        />
       </div>
     </div>
   );
@@ -47,15 +54,17 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
         <Button
           style={{ width: "167px" }}
           label="Remove"
-          className="create-quiz__button-cancel"
+          className="button__common-style button__create-quiz-remove"
         />
       </div>
       <div className="create-quiz__button-wrapper">
-        <Button label="Cancel" className="create-quiz__button-cancel" />
         <Button
-          style={{ width: "138px" }}
+          label="Cancel"
+          className="button__common-style button__create-quiz-cancel"
+        />
+        <Button
           label="Save"
-          className="create-quiz__button-create"
+          className="button__common-style button__create-quiz-save"
         />
       </div>
     </div>
@@ -82,7 +91,7 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
   );
 
   return (
-    <div className="create-quiz flex flex-column">
+    <div className="create-quiz flex flex-column button">
       <Header />
       <div className="card--center mt-6">
         <Card
@@ -154,14 +163,8 @@ export const CreateQuiz: React.FC<CreateQuizProps> = ({}) => {
 
             <div className="create-quiz__answer">
               <Button
-                style={{
-                  width: "152px",
-                  height: "40px",
-                  padding: "4px 24px",
-                  color: "#272022",
-                }}
                 label="Add answer"
-                className="create-quiz__button-cancel"
+                className="button__common-style button__create-quiz-add"
               />
             </div>
           </div>
