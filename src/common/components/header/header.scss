@@ -22,25 +22,68 @@
 
   .navbar__items {
     width: 140px;
-    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
     padding: 0px;
-    gap: 8px;
-
-    a {
-      text-decoration: none;
-      color: #272022;
-      font-weight: 600;
-      font-size: 17px;
-      line-height: 32px;
-      cursor: pointer;
-    }
   }
 
   .navbar__item {
     list-style: none;
     margin-left: 2rem;
+  }
+
+  .navbar__sidebar--toggle {
+    width: 65px;
+  }
+
+  .navbar__sidebar-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+
+.sidebar {
+  width: 16rem;
+  background: #fff;
+  height: calc(100% - 80px);
+  position: absolute;
+  z-index: 1;
+  top: 80px;
+  left: -100%;
+  transition: 0.75s all ease-in-out;
+}
+
+.sidebar--active {
+  left: 0;
+}
+
+.sidebar__items {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+
+  height: 3rem;
+
+  list-style: none;
+  margin-left: 2rem;
+  margin-top: 1rem;
+}
+
+.menu__items {
+  display: flex;
+  gap: 8px;
+
+  a {
+    text-decoration: none;
+    color: #272022;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 32px;
+    cursor: pointer;
   }
 }
