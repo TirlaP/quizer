@@ -13,8 +13,14 @@ export const CreateQuizFirstCard: React.FC = () => {
         </p>
       </div>
       <div className="create-quiz__button-wrapper">
-        <Button label="Cancel" className="create-quiz__button-cancel" />
-        <Button label="Create quiz" className="create-quiz__button-create" />
+        <Button
+          label="Cancel"
+          className="button__common-style button__create-quiz-cancel"
+        />
+        <Button
+          label="Create quiz"
+          className="button__common-style button__create-quiz-create"
+        />
       </div>
     </div>
   );

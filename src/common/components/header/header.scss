@@ -43,20 +43,4 @@
     list-style: none;
     margin-left: 2rem;
   }
-
-  .navbar__button-quiz {
-    opacity: 0.9;
-    width: 125px;
-    height: 36px;
-
-    /* Main color */
-
-    background: #9141f6;
-    border: 3px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
 }

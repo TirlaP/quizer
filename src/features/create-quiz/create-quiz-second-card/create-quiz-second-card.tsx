@@ -3,11 +3,27 @@ import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { useState } from "react";
-import { RadioButton } from "primereact/radiobutton";
 import { AnswerItem } from "./components/answer-item";
 
-export const CreateQuizSecondCard: React.FC = () => {
-  const [answer, setAnswer] = useState(null);
+import { observer } from "mobx-react";
+import { QuizStore } from "../store/CreateQuizStore";
+
+export const CreateQuizSecondCard: React.FC = observer(() => {
+  const [value, setValue] = useState<string>("");
+
+  const [selectedCity1, setSelectedCity1] = useState(null);
+  const cities = [
+    { name: "New York", code: "NY" },
+    { name: "Rome", code: "RM" },
+    { name: "London", code: "LDN" },
+    { name: "Istanbul", code: "IST" },
+    { name: "Paris", code: "PRS" },
+  ];
+
+  const onCityChange = (e: { value: any }) => {
+    setSelectedCity1(e.value);
+  };
+
   const [list, setList] = useState([1, 2]);
 
   const addAnswer = () => {
@@ -28,7 +44,14 @@ export const CreateQuizSecondCard: React.FC = () => {
       <div className="create-quiz__title-wrapper">
         <h2 className="create-quiz__title">New question</h2>
       </div>
-      <Dropdown className="create-quiz__dropdown" placeholder="Question type" />
+      <Dropdown
+        value={selectedCity1}
+        options={cities}
+        onChange={onCityChange}
+        optionLabel="name"
+        className="create-quiz__dropdown"
+        placeholder="Question type"
+      />
     </div>
   );
   const QuestionFooterCard = (
@@ -37,15 +60,23 @@ export const CreateQuizSecondCard: React.FC = () => {
         <Button
           style={{ width: "167px" }}
           label="Remove"
-          className="create-quiz__button-cancel"
+          className="button__common-style button__create-quiz-remove"
         />
       </div>
       <div className="create-quiz__button-wrapper">
-        <Button label="Cancel" className="create-quiz__button-cancel" />
         <Button
-          style={{ width: "138px" }}
+          label="Cancel"
+          className="button__common-style button__create-quiz-cancel"
+        />
+        <Button
           label="Save"
-          className="create-quiz__button-create"
+          className="button__common-style button__create-quiz-save"
+          onClick={() => {
+            if (value) {
+              QuizStore.addQuestion(value);
+              setValue("");
+            }
+          }}
         />
       </div>
     </div>
@@ -64,6 +95,10 @@ export const CreateQuizSecondCard: React.FC = () => {
             style={{ width: "640px" }}
             className="create-quiz__input"
             placeholder="What is your question?"
+            value={value}
+            onChange={(event) => {
+              setValue(event.target.value);
+            }}
           />
         </div>
 
@@ -79,35 +114,15 @@ export const CreateQuizSecondCard: React.FC = () => {
             />
           </div>
         ))}
-        {/* <AnswerItem
-          checked={true}
-          value={"Answer1"}
-          name={"answer"}
-          inputId={"answer1"}
-          index={0}
-        />
-        <AnswerItem
-          checked={false}
-          value={"Answer2"}
-          name={"answer"}
-          inputId={"answer2"}
-          index={1}
-        /> */}
 
         <div className="create-quiz__answer">
           <Button
-            style={{
-              width: "152px",
-              height: "40px",
-              padding: "4px 24px",
-              color: "#272022",
-            }}
             label="Add answer"
-            className="create-quiz__button-cancel"
+            className="button__common-style button__create-quiz-add"
             onClick={addAnswer}
           />
         </div>
       </div>
     </Card>
   );
-};
+});

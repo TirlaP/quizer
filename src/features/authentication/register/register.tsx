@@ -110,7 +110,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
           </div>
 
           <div className="align-items-center">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="button">
               <div className="flex flex-column align-items-start p-input-icon-right">
                 <label
                   htmlFor="email"
@@ -167,7 +167,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
                 </small>
               </div>
 
-              <Button label="Register" className="register__button-register" />
+              <Button
+                label="Register"
+                className="button__common-style button__login-login mt-5"
+              />
             </form>
 
             <div className="register__divider">
@@ -175,17 +178,17 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
             </div>
 
             <div className="flex flex-column mt-3 media__wrapper__column">
-              <div className="media__wrapper__row">
+              <div className="media__wrapper__row button">
                 <Button
                   label="Google"
                   icon="pi pi-google"
-                  className="register__button-media"
+                  className="button__common-style button__login-media"
                   onClick={register}
                 />
                 <Button
                   label="Facebook"
                   icon="pi pi-facebook"
-                  className="register__button-media"
+                  className="button__common-style button__login-media"
                 />
               </div>
               <p>

@@ -12,6 +12,7 @@
     width: 221px;
     height: 56px;
     padding: 8px;
+    align-items: center;
 
     background: #f9f8f9;
     border: 1px solid #d1cedc;
@@ -22,37 +23,6 @@
     display: flex;
     flex-direction: row;
     gap: 16px;
-  }
-  .create-quiz__button-create {
-    opacity: 0.9;
-    width: 232px;
-    height: 56px;
-
-    background: #9141f6;
-    border: 3px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-  .create-quiz__button-cancel {
-    opacity: 0.8;
-    width: 157px;
-    height: 56px;
-
-    padding: 12px 48px;
-    gap: 12px;
-    color: #272022;
-
-    background: #ffffff;
-
-    border: 3px solid #666273;
-    border-radius: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 
   .create-quiz__title-wrapper {
@@ -125,6 +95,10 @@
     border-radius: 14px;
   }
 
+  .create-quiz__bottom-section {
+    max-height: 700px;
+  }
+
   .create-quiz__first-card {
     width: 1040px;
     height: 248px;
@@ -132,7 +106,9 @@
 
   .create-quiz__second-card {
     width: 688px;
-    height: 700px;
+    height: fit-content;
+    max-height: inherit;
+    overflow: auto;
   }
 
   .create-quiz__third-card {
@@ -141,6 +117,12 @@
 
     padding: 24px;
     gap: 16px;
+  }
+
+  .create-quiz__question-list {
+    height: 100%;
+    max-height: inherit;
+    overflow: auto;
   }
 
   .create-quiz__list-title {
@@ -168,9 +150,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-    }
-    .create-quiz__button-create {
-      width: 157px;
     }
   }
 }
