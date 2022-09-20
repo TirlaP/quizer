@@ -9,6 +9,7 @@ interface AnswerItemProps {
   inputId: string;
   index: number;
   handleClick: any;
+  handleChange: any;
 }
 
 export const AnswerItem: React.FC<AnswerItemProps> = ({
@@ -18,6 +19,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
   inputId,
   index,
   handleClick,
+  handleChange,
 }) => {
   return (
     <div className="create-quiz__answer">
@@ -27,6 +29,9 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
           style={{ width: "312px" }}
           className="create-quiz__input"
           placeholder="Enter your answer"
+          onChange={(event) =>
+            handleChange(event.target.value, index, "answerName")
+          }
         />
         <i
           className="pi pi-trash create-quiz__answer-icon"

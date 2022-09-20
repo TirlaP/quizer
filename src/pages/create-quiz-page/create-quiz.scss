@@ -117,6 +117,14 @@
 
     padding: 24px;
     gap: 16px;
+
+    &:hover {
+      cursor: pointer;
+      border: 2px solid #9141f6;
+    }
+  }
+  .create-quiz__third-card--active {
+    border: 2px solid #9141f6;
   }
 
   .create-quiz__question-list {
