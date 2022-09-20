@@ -73,10 +73,8 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   const handleFirebaseAdd = async (e: any) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "cities"), {
-        name: "Los Angeles",
-        state: "CA",
-        country: "USA",
+      await addDoc(collection(db, "questions"), {
+        ...question,
         timeStamp: serverTimestamp(),
       });
     } catch (err) {
