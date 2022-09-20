@@ -14,9 +14,9 @@ export const QuestionList: React.FC<QuestionListProps> = observer(() => {
         {QuizStore.questions.map((question, index) => (
           <div key={index}>
             <QuestionItem
-              questionName={`Question ${question.title}`}
+              questionName={`Question ${question.question}`}
               handleClick={() => QuizStore.removeQuestion(question.id)}
-              answers={Math.floor(Math.random() * 10) + 1}
+              numberOfAnswers={Math.floor(Math.random() * 10) + 1}
             />
           </div>
         ))}

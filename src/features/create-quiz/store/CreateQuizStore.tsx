@@ -1,4 +1,5 @@
 import { makeAutoObservable, toJS } from "mobx";
+import uuid from "react-uuid";
 
 export interface QuestionItem {
   id: number;
@@ -15,7 +16,7 @@ export class QuizStoreImpl {
 
   addQuestion(title: string) {
     const item: QuestionItem = {
-      id: +Math.random().toFixed(4),
+      id: +uuid(),
       title,
       completed: false,
     };

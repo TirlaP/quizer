@@ -6,11 +6,11 @@ import { observer } from "mobx-react";
 interface QuestionItemProps {
   questionName: string;
   handleClick: any;
-  answers: number;
+  numberOfAnswers: number;
 }
 
 export const QuestionItem: React.FC<QuestionItemProps> = observer(
-  ({ questionName, handleClick, answers }) => {
+  ({ questionName, handleClick, numberOfAnswers }) => {
     const QuestionListItemHeaderCard = (
       <div className="flex flex-column">
         <div className="flex flex-row align-items-center justify-content-between">
@@ -26,7 +26,7 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
         <div>
           <div className="flex flex-row align-items-center gap-2">
             <i className="pi pi-file"></i>
-            <p>{answers} answers</p>
+            <p>{numberOfAnswers} answers</p>
           </div>
         </div>
       </div>
