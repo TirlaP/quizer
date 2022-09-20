@@ -25,7 +25,7 @@ export const QuestionList: React.FC<QuestionListProps> = observer(() => {
                 QuizStore.selectQuestion(question);
                 console.log(toJS(QuizStore.selectedQuestion));
               }}
-              answers={question.question?.answerList.length}
+              numberOfAnswers={question.question?.answerList.length}
               id={question.id}
             />
           </div>
