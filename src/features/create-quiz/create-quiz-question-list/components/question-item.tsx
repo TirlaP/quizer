@@ -10,7 +10,7 @@ interface QuestionItemProps {
   handleClick: any;
   handleSelect: any;
   numberOfAnswers: number | undefined;
-  id: number;
+  id: string;
 }
 
 export const QuestionItem: React.FC<QuestionItemProps> = observer(
@@ -36,11 +36,6 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
       </div>
     );
 
-    const handle = () => {
-      console.log(
-        `Id ${QuizStore.selectedQuestion?.question?.id} equal to ${id}`
-      );
-    };
     return (
       <Card
         header={QuestionListItemHeaderCard}
@@ -51,7 +46,6 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
         }`}
         onClick={() => {
           handleSelect();
-          handle();
         }}
       ></Card>
     );

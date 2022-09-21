@@ -3,7 +3,7 @@ import { Question } from "../create-quiz-second-card/create-quiz-second-card";
 import uuid from "react-uuid";
 
 export interface QuestionItem {
-  id: number;
+  id: string;
   question: Question | null;
   completed: boolean;
 }
@@ -21,21 +21,28 @@ export class QuizStoreImpl {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addQuestion(question: Question | null) {
+  addQuestion(question: Question | null, isCorrectResponse: number | null) {
     const item: QuestionItem = {
-      id: +uuid(),
+      id: uuid(),
       question,
       completed: false,
     };
+
+    item.question?.answerList.map((answer, index) =>
+      index === isCorrectResponse
+        ? (answer.isCorrectAnswer = true)
+        : (answer.isCorrectAnswer = false)
+    );
+    console.log(item);
     this.questions.push(item);
   }
 
-  removeQuestion(id: number) {
+  removeQuestion(id: string) {
     this.questions = this.questions.filter((Question) => Question.id !== id);
     console.log(toJS(this.questions));
   }
 
-  toggleQuestion(id: number) {
+  toggleQuestion(id: string) {
     const index = this.questions.findIndex((item) => item.id === id);
     if (index > -1) {
       this.questions[index].completed = !this.questions[index].completed;
