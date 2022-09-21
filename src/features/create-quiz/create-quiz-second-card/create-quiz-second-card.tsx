@@ -2,42 +2,93 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnswerItem } from "./components/answer-item";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../store/CreateQuizStore";
 
-export const CreateQuizSecondCard: React.FC = observer(() => {
-  const [value, setValue] = useState<string>("");
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import { db } from "../../../config/firebase-config";
 
-  const [selectedCity1, setSelectedCity1] = useState(null);
-  const cities = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
+export interface Question {
+  answerList: AnswersList[];
+  questionName: string;
+  questionType: string | null;
+}
+
+export interface AnswersList {
+  isCorrectAnswer: boolean;
+  answerName: string;
+}
+
+export const CreateQuizSecondCard: React.FC = observer(() => {
+  const [question, setQuestion] = useState<Question | null>(null);
+
+  const [questionName, setQuestionName] = useState<string>("");
+
+  const [questionType, setQuestionType] = useState(null);
+  const questionTypes = [
+    { name: "Multiple answers" },
+    { name: "Single answer" },
+    { name: "Subjective" },
   ];
 
   const onCityChange = (e: { value: any }) => {
-    setSelectedCity1(e.value);
+    setQuestionType(e.value);
   };
 
-  const [list, setList] = useState([1, 2]);
+  const [answerList, setAnswerList] = useState<AnswersList[]>([
+    {
+      isCorrectAnswer: true,
+      answerName: "",
+    },
+  ]);
+
+  const handleInputChange = (value: any, index: number) => {
+    const newList = answerList;
+    newList[index].answerName = value;
+    setAnswerList(newList);
+  };
 
   const addAnswer = () => {
-    const newList = list;
-    newList.push(list.length);
-    setList([...newList]);
+    const newList = answerList;
+    newList.push({ isCorrectAnswer: false, answerName: "" });
+    setAnswerList([...newList]);
   };
 
   const removeAnswer = (index: number) => {
-    let newList = list;
+    let newList = answerList;
     newList.splice(index, 1);
     console.log(`Deleted item ${index}`);
-    setList([...newList]);
+    setAnswerList([...newList]);
   };
+
+  const handleFirebaseAdd = async (e: any) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "questions"), {
+        ...question,
+        timeStamp: serverTimestamp(),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    setQuestion({
+      answerList,
+      questionName,
+      questionType,
+    });
+  }, [answerList, questionName, questionType]);
 
   const QuestionHeaderCard = (
     <div className="flex flex-row align-items-center justify-content-between">
@@ -45,8 +96,8 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         <h2 className="create-quiz__title">New question</h2>
       </div>
       <Dropdown
-        value={selectedCity1}
-        options={cities}
+        value={questionType}
+        options={questionTypes}
         onChange={onCityChange}
         optionLabel="name"
         className="create-quiz__dropdown"
@@ -71,10 +122,12 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         <Button
           label="Save"
           className="button__common-style button__create-quiz-save"
-          onClick={() => {
-            if (value) {
-              QuizStore.addQuestion(value);
-              setValue("");
+          onClick={(event) => {
+            console.log(question);
+            if (question) {
+              QuizStore.addQuestion(question);
+              setQuestionName("");
+              handleFirebaseAdd(event);
             }
           }}
         />
@@ -95,22 +148,23 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
             style={{ width: "640px" }}
             className="create-quiz__input"
             placeholder="What is your question?"
-            value={value}
+            value={questionName}
             onChange={(event) => {
-              setValue(event.target.value);
+              setQuestionName(event.target.value);
             }}
           />
         </div>
 
-        {list.map((answer, index) => (
+        {answerList.map((answer, index) => (
           <div key={index}>
             <AnswerItem
-              checked={true}
-              value={"Answer1"}
+              checked={answer.isCorrectAnswer}
+              value={answer.answerName}
               name={"answer"}
               inputId={"answer1"}
               index={index}
               handleClick={removeAnswer}
+              handleChange={handleInputChange}
             />
           </div>
         ))}

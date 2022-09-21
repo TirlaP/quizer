@@ -3,6 +3,7 @@ import { QuestionItem } from "./components/question-item";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../store/CreateQuizStore";
+import { toJS } from "mobx";
 
 interface QuestionListProps {}
 
@@ -14,9 +15,15 @@ export const QuestionList: React.FC<QuestionListProps> = observer(() => {
         {QuizStore.questions.map((question, index) => (
           <div key={index}>
             <QuestionItem
-              questionName={`Question ${question.question}`}
+              questionName={`${
+                question.question?.questionName || "Untitled question"
+              }`}
               handleClick={() => QuizStore.removeQuestion(question.id)}
-              numberOfAnswers={Math.floor(Math.random() * 10) + 1}
+              handleSelect={() => {
+                QuizStore.selectQuestion(question);
+              }}
+              numberOfAnswers={question.question?.answerList.length}
+              id={question.id}
             />
           </div>
         ))}

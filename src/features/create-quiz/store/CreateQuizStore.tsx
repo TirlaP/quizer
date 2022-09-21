@@ -1,23 +1,30 @@
 import { makeAutoObservable, toJS } from "mobx";
+import { Question } from "../create-quiz-second-card/create-quiz-second-card";
 import uuid from "react-uuid";
 
 export interface QuestionItem {
   id: number;
-  title: string;
+  question: Question | null;
   completed: boolean;
+}
+
+interface SelectedQuestion {
+  question: QuestionItem | null;
+  isSelected: boolean;
 }
 
 export class QuizStoreImpl {
   questions: QuestionItem[] = [];
+  selectedQuestion: SelectedQuestion | null = null;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addQuestion(title: string) {
+  addQuestion(question: Question | null) {
     const item: QuestionItem = {
       id: +uuid(),
-      title,
+      question,
       completed: false,
     };
     this.questions.push(item);
@@ -33,6 +40,13 @@ export class QuizStoreImpl {
     if (index > -1) {
       this.questions[index].completed = !this.questions[index].completed;
     }
+  }
+
+  selectQuestion(question: QuestionItem | null) {
+    this.selectedQuestion = {
+      question: question,
+      isSelected: true,
+    };
   }
 
   get status() {
