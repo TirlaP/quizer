@@ -6,6 +6,7 @@ import { auth } from "../../../config/firebase-config";
 
 import "./header.scss";
 import "../../../styles/buttons.scss";
+import { RESOLUTION_BREAKPOINTS } from "../../constants/constant";
 
 import logo from "../../../common/assets/Logo-red.png";
 import { Button } from "primereact/button";
@@ -34,14 +35,14 @@ export const Header: React.FC<HeaderProps> = observer(() => {
   };
 
   useEffect(() => {
-    if (window.innerWidth < 1024) {
+    if (window.innerWidth < RESOLUTION_BREAKPOINTS.LAPTOP) {
       setMobile(true);
     }
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) {
+      if (window.innerWidth < RESOLUTION_BREAKPOINTS.LAPTOP) {
         setMobile(true);
       } else {
         setSidebar(false);

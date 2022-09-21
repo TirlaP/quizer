@@ -29,9 +29,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
           style={{ width: "312px" }}
           className="create-quiz__input"
           placeholder="Enter your answer"
-          onChange={(event) =>
-            handleChange(event.target.value, index, "answerName")
-          }
+          onChange={(event) => handleChange(event.target.value, index)}
         />
         <i
           className="pi pi-trash create-quiz__answer-icon"
@@ -43,7 +41,6 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
           inputId={inputId}
           name={name}
           value={value}
-          // onChange={(e) => setAnswer(e.value)}
           checked={checked}
         />
         <label htmlFor={inputId}>This is the correct answer</label>

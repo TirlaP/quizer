@@ -9,7 +9,7 @@ interface QuestionItemProps {
   questionName: string;
   handleClick: any;
   handleSelect: any;
-  numberOfAnswers: number | undefined;
+  numberOfAnswers?: number;
   id: number;
 }
 
@@ -36,11 +36,6 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
       </div>
     );
 
-    const handle = () => {
-      console.log(
-        `Id ${QuizStore.selectedQuestion?.question?.id} equal to ${id}`
-      );
-    };
     return (
       <Card
         header={QuestionListItemHeaderCard}
@@ -49,10 +44,7 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
             ? "create-quiz__third-card--active"
             : ""
         }`}
-        onClick={() => {
-          handleSelect();
-          handle();
-        }}
+        onClick={() => handleSelect()}
       ></Card>
     );
   }

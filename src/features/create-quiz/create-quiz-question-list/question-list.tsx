@@ -16,14 +16,11 @@ export const QuestionList: React.FC<QuestionListProps> = observer(() => {
           <div key={index}>
             <QuestionItem
               questionName={`${
-                question.question?.questionName
-                  ? question.question?.questionName
-                  : "Untitled question"
+                question.question?.questionName || "Untitled question"
               }`}
               handleClick={() => QuizStore.removeQuestion(question.id)}
               handleSelect={() => {
                 QuizStore.selectQuestion(question);
-                console.log(toJS(QuizStore.selectedQuestion));
               }}
               numberOfAnswers={question.question?.answerList.length}
               id={question.id}
