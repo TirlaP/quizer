@@ -46,9 +46,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
           placeholder="Enter your answer"
           value={value}
           onChange={(event) => {
-            console.log(event.target.value);
-            console.log(name);
-            handleChange(event.target.value, index, "answerName");
+            handleChange(event.target.value, index);
           }}
         />
         <i

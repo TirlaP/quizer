@@ -1,4 +1,4 @@
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
@@ -12,15 +12,11 @@ import { QuizStore } from "../store/CreateQuizStore";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../config/firebase-config";
+import { toJS } from "mobx";
 
-interface InitialValues {
-  answerList: AnswersList[];
-  questionTypeSelect: string | null;
-  questionInput: string;
-}
 export interface Question {
   answerList: AnswersList[];
-  questionName: string;
+  questionName?: string;
   questionType: string | null;
 }
 export interface InputErrors {
@@ -32,25 +28,8 @@ export interface AnswersList {
   answerName: string;
 }
 
-/**
- * 
-
-InputErrors {
-[K in string]: string
-}
-
-`answer${index}`
-
-errors = {answer1: "error message"}
-
- */
-
 export const CreateQuizSecondCard: React.FC = observer(() => {
-  const [question, setQuestion] = useState<Question | null>(null);
-  const [questionName, setQuestionName] = useState<string>("");
-  const [questionType, setQuestionType] = useState(null);
   const [radio, setRadio] = useState<number | null>(null);
-  const [formData, setFormData] = useState<InitialValues | null>(null);
   const [answerList, setAnswerList] = useState<AnswersList[]>([
     {
       isCorrectAnswer: true,
@@ -68,16 +47,11 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     setRadio(id);
   };
 
-  const onTypeChange = (e: { value: any }) => {
-    setQuestionType(e.value);
-  };
-
-  const handleInputChange = (value: any, index: number) => {
+  const handleAnswerInputChange = (value: any, index: number) => {
     const newList = answerList;
     newList[index].answerName = value;
-    console.log(newList);
     formik.values.answerList = [...newList];
-    setAnswerList(newList);
+    setAnswerList([...newList]);
   };
 
   const addAnswer = () => {
@@ -88,17 +62,14 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   };
 
   const removeAnswer = (index: number) => {
-    let newList = answerList;
-    newList.splice(index, 1);
-    console.log(`Deleted item ${index}`);
+    let newList = answerList.filter((_, answerIndex) => answerIndex !== index);
     setAnswerList([...newList]);
   };
 
-  const handleFirebaseAdd = async (e: any) => {
-    e.preventDefault();
+  const handleFirebaseAdd = async () => {
     try {
       await addDoc(collection(db, "questions"), {
-        ...question,
+        question: { ...formik.values, answerList, radio },
         timeStamp: serverTimestamp(),
       });
     } catch (err) {
@@ -123,32 +94,42 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     validate: (data) => {
       let errors: InputErrors = {} as InputErrors;
 
-      // if (!data.questionTypeSelect) {
-      //   errors.questionTypeSelect = "Question type is required.";
-      // }
+      if (!data.questionType) {
+        errors.questionType = "Question type is required.";
+      }
 
       if (!data.questionName) {
         errors.questionName = "Question name is required.";
       }
-      console.log(formik.errors);
 
-      // errors.answerList = [] as AnswersList[];
-      data.answerList.map((answer, index) => {
+      data.answerList?.map((answer, index) => {
         if (!answer.answerName) {
           errors[`answerInput${index}`] = "Answer name is required.";
         }
-        // errors.answerList.push({
-        //   answerName: `${answer.answerName ? "" : "Answer name is required."}`,
-        // });
       });
 
       return errors;
     },
     onSubmit: (data) => {
-      console.log(data);
       if (Object.keys(formik.errors).length === 0) {
-        QuizStore.addQuestion({ ...formik.values, answerList }, radio);
-        setQuestionName("");
+        if (QuizStore.selectedQuestionID) {
+          QuizStore.editQuestion(QuizStore.selectedQuestionID, {
+            ...formik.values,
+            answerList,
+          });
+          handleFirebaseAdd();
+        } else {
+          QuizStore.addQuestion({ ...formik.values, answerList }, radio);
+        }
+
+        data.questionName = "";
+        formik.values.questionType = "";
+        setAnswerList([
+          {
+            isCorrectAnswer: false,
+            answerName: "",
+          },
+        ]);
       }
 
       formik.resetForm();
@@ -156,7 +137,11 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   });
 
   const isFormFieldValid = (name: any) => {
-    return !!formik.errors[name];
+    if (name.toLowerCase().includes("answer".toLocaleLowerCase())) {
+      return !!formik.errors[name];
+    } else {
+      return !!(formik.errors[name] && formik.touched[name]);
+    }
   };
 
   const getFormErrorMessage = (name: any) => {
@@ -176,26 +161,41 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   }, [radio]);
 
   useEffect(() => {
-    setQuestion({
-      answerList,
-      questionName,
-      questionType,
-    });
-  }, [answerList, questionName, questionType]);
+    if (QuizStore.selectedQuestion) {
+      setAnswerList(QuizStore.selectedQuestion.question?.answerList || []);
+      formik.values.answerList =
+        QuizStore.selectedQuestion?.question?.answerList;
+    }
+
+    formik.values.questionType = toJS(
+      QuizStore.selectedQuestion?.question?.questionType
+    );
+    if (QuizStore.selectedQuestionID) {
+      formik.values.questionName =
+        QuizStore.selectedQuestion?.question?.questionName;
+    }
+  }, [QuizStore.selectedQuestionID]);
 
   const QuestionHeaderCard = (
     <div className="flex flex-row align-items-center justify-content-between">
       <div className="create-quiz__title-wrapper">
-        <h2 className="create-quiz__title">New question</h2>
+        <h2 className="create-quiz__title">
+          {QuizStore.selectedQuestionID ? "Edit question" : "New question"}
+        </h2>
       </div>
-      <Dropdown
-        value={questionType}
-        options={questionTypes}
-        onChange={onTypeChange}
-        optionLabel="name"
-        className="create-quiz__dropdown"
-        placeholder="Question type"
-      />
+      <div className="flex flex-column">
+        <Dropdown
+          id="questionType"
+          name="questionType"
+          value={formik.values.questionType}
+          options={questionTypes}
+          onChange={formik.handleChange}
+          optionLabel="name"
+          className="create-quiz__dropdown"
+          placeholder="Question type"
+        />
+        {getFormErrorMessage("questionType")}
+      </div>
     </div>
   );
 
@@ -230,12 +230,12 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
             {answerList.map((answer, index) => (
               <div key={index}>
                 <AnswerItem
-                  checked={radio === index}
+                  checked={answer.isCorrectAnswer || false}
                   name={`answerInput${index}`}
                   inputId={`answer${index + 1}`}
                   index={index}
-                  value={formik.values.answerInput}
-                  handleChange={handleInputChange}
+                  value={answer.answerName}
+                  handleChange={handleAnswerInputChange}
                   handleClick={removeAnswer}
                   getError={(inputName: string) =>
                     getFormErrorMessage(inputName)
@@ -273,7 +273,6 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                 type="submit"
                 label="Save"
                 className="button__common-style button__create-quiz-save"
-                onClick={(event) => {}}
               />
             </div>
           </div>

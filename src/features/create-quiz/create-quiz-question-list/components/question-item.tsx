@@ -4,13 +4,14 @@ import { Button } from "primereact/button";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../../store/CreateQuizStore";
+import { toJS } from "mobx";
 
 interface QuestionItemProps {
   questionName: string;
   handleClick: any;
   handleSelect: any;
-  numberOfAnswers: number | undefined;
   id: string;
+  numberOfAnswers?: number;
 }
 
 export const QuestionItem: React.FC<QuestionItemProps> = observer(
@@ -40,13 +41,11 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
       <Card
         header={QuestionListItemHeaderCard}
         className={`create-quiz__third-card create-quiz__common-card-style mb-3 ${
-          QuizStore.selectedQuestion?.question?.id === id
+          QuizStore.selectedQuestionID === id
             ? "create-quiz__third-card--active"
             : ""
         }`}
-        onClick={() => {
-          handleSelect();
-        }}
+        onClick={() => handleSelect()}
       ></Card>
     );
   }

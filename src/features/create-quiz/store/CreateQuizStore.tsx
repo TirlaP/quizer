@@ -8,14 +8,9 @@ export interface QuestionItem {
   completed: boolean;
 }
 
-interface SelectedQuestion {
-  question: QuestionItem | null;
-  isSelected: boolean;
-}
-
 export class QuizStoreImpl {
   questions: QuestionItem[] = [];
-  selectedQuestion: SelectedQuestion | null = null;
+  selectedQuestionID?: string;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -33,13 +28,21 @@ export class QuizStoreImpl {
         ? (answer.isCorrectAnswer = true)
         : (answer.isCorrectAnswer = false)
     );
-    console.log(item);
     this.questions.push(item);
+  }
+
+  editQuestion(questionId: string, updatedQuestion: Question | null) {
+    const result = this.questions.find(
+      (question) => question.id === questionId
+    );
+    if (result) {
+      result.question = updatedQuestion;
+      this.selectedQuestionID = "";
+    }
   }
 
   removeQuestion(id: string) {
     this.questions = this.questions.filter((Question) => Question.id !== id);
-    console.log(toJS(this.questions));
   }
 
   toggleQuestion(id: string) {
@@ -50,10 +53,13 @@ export class QuizStoreImpl {
   }
 
   selectQuestion(question: QuestionItem | null) {
-    this.selectedQuestion = {
-      question: question,
-      isSelected: true,
-    };
+    this.selectedQuestionID = question?.id;
+  }
+
+  get selectedQuestion() {
+    return this.questions.find(
+      (question) => question.id === this.selectedQuestionID
+    );
   }
 
   get status() {
