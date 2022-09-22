@@ -107,6 +107,13 @@
     height: 248px;
   }
 
+  .create-quiz__first-card-form {
+    margin-top: -3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
   .create-quiz__second-card {
     width: 688px;
     height: fit-content;
