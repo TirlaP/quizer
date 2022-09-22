@@ -30,19 +30,16 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
 }) => {
   return (
     <div className="create-quiz__answer">
-      <label
-        htmlFor="question"
-        className={`create-quiz__input-label ${classNames({
-          " p-error": formValidation(`${name}`),
-        })}`}
-      >
+      <label htmlFor="question" className="create-quiz__input-label">
         Answer {`0${index + 1}`}*
       </label>
       <div className="flex flex-row align-items-center gap-3">
         <InputText
           id={`${name}`}
           style={{ width: "312px" }}
-          className="create-quiz__input"
+          className={`create-quiz__input ${
+            getError(name) ? "create-quiz__input-error" : ""
+          }`}
           placeholder="Enter your answer"
           value={value}
           onChange={(event) => {

@@ -183,7 +183,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           {QuizStore.selectedQuestionID ? "Edit question" : "New question"}
         </h2>
       </div>
-      <div className="flex flex-column">
+      <div className="flex flex-column align-items-start">
         <Dropdown
           id="questionType"
           name="questionType"
@@ -191,7 +191,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           options={questionTypes}
           onChange={formik.handleChange}
           optionLabel="name"
-          className="create-quiz__dropdown"
+          className={`create-quiz__dropdown ${
+            isFormFieldValid("questionType") ? "create-quiz__input-error" : ""
+          }`}
           placeholder="Question type"
         />
         {getFormErrorMessage("questionType")}
@@ -210,16 +212,20 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
             <div className="create-quiz__answer">
               <label
                 htmlFor="question"
-                className={`create-quiz__input-label ${classNames({
-                  " p-error": isFormFieldValid("questionName"),
-                })}`}
+                className={`create-quiz__input-label ${
+                  isFormFieldValid("questionName") ? "" : "p-error"
+                }`}
               >
                 Question*
               </label>
               <InputText
                 id="questionName"
                 style={{ width: "640px" }}
-                className="create-quiz__input"
+                className={`create-quiz__input ${
+                  isFormFieldValid("questionName")
+                    ? "create-quiz__input-error"
+                    : ""
+                }`}
                 placeholder="What is your question?"
                 value={formik.values.questionName}
                 onChange={formik.handleChange}

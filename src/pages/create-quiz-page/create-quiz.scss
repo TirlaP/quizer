@@ -68,6 +68,9 @@
     border: 1px solid #d1cedc;
     border-radius: 8px;
   }
+  .create-quiz__input-error {
+    border: 1px solid red;
+  }
 
   .create-quiz__answers-wrapper {
     gap: 32px;
