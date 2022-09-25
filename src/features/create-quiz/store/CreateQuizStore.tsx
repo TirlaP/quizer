@@ -3,39 +3,49 @@ import { Question } from "../create-quiz-second-card/create-quiz-second-card";
 import uuid from "react-uuid";
 
 export interface QuestionItem {
-  id: number;
+  id: string;
   question: Question | null;
   completed: boolean;
 }
 
-interface SelectedQuestion {
-  question: QuestionItem | null;
-  isSelected: boolean;
-}
-
 export class QuizStoreImpl {
   questions: QuestionItem[] = [];
-  selectedQuestion: SelectedQuestion | null = null;
+  selectedQuestionID?: string;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addQuestion(question: Question | null) {
+  addQuestion(question: Question | null, correctResponseIndex: number | null) {
     const item: QuestionItem = {
-      id: +uuid(),
+      id: uuid(),
       question,
       completed: false,
     };
+
+    item.question?.answerList.map((answer, index) =>
+      index === correctResponseIndex
+        ? (answer.isCorrectAnswer = true)
+        : (answer.isCorrectAnswer = false)
+    );
     this.questions.push(item);
   }
 
-  removeQuestion(id: number) {
-    this.questions = this.questions.filter((Question) => Question.id !== id);
-    console.log(toJS(this.questions));
+  editQuestion(questionId: string, updatedQuestion: Question | null) {
+    const result = this.questions.find(
+      (question) => question.id === questionId
+    );
+    if (result) {
+      result.question = updatedQuestion;
+      this.selectedQuestionID = "";
+    }
   }
 
-  toggleQuestion(id: number) {
+  removeQuestion(id: string) {
+    this.questions = this.questions.filter((Question) => Question.id !== id);
+  }
+
+  toggleQuestion(id: string) {
     const index = this.questions.findIndex((item) => item.id === id);
     if (index > -1) {
       this.questions[index].completed = !this.questions[index].completed;
@@ -43,10 +53,13 @@ export class QuizStoreImpl {
   }
 
   selectQuestion(question: QuestionItem | null) {
-    this.selectedQuestion = {
-      question: question,
-      isSelected: true,
-    };
+    this.selectedQuestionID = question?.id;
+  }
+
+  get selectedQuestion() {
+    return this.questions.find(
+      (question) => question.id === this.selectedQuestionID
+    );
   }
 
   get status() {

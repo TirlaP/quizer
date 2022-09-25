@@ -3,7 +3,6 @@ import { QuestionItem } from "./components/question-item";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../store/CreateQuizStore";
-import { toJS } from "mobx";
 
 interface QuestionListProps {}
 
