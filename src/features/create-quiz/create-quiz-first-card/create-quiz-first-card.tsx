@@ -10,11 +10,14 @@ import { QuestionItem, QuizStore } from "../store/CreateQuizStore";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../config/firebase-config";
+import { useNavigate } from "react-router-dom";
 export interface InputErrors {
   [key: string]: string;
 }
 
 export const CreateQuizFirstCard: React.FC = observer(() => {
+  const navigate = useNavigate();
+
   const toast = useRef<Toast>(null);
 
   const [quizName, setQuizName] = useState("");
@@ -75,13 +78,23 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
           timeStamp: serverTimestamp(),
         });
         showSuccess("Quiz has been created successfuly.");
-        console.log("Succes add");
+        navigate("/homepage");
       } else {
         console.log("No questions");
         showError();
       }
     } catch (err) {
       console.log(err);
+      showError();
+    }
+  };
+
+  const handleFirebaseUpdate = async () => {
+    try {
+      showSuccess("Quiz has been updated successfuly.");
+      setTimeout(() => {}, 1000);
+      navigate("/homepage");
+    } catch (err) {
       showError();
     }
   };
@@ -104,10 +117,15 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
     },
     onSubmit: (data) => {
       if (Object.keys(formik.errors).length === 0) {
-        handleFirebaseAdd();
-
-        data.quizName = "";
+        if (QuizStore.selectedQuizID) {
+          handleFirebaseUpdate();
+          QuizStore.deselectQuiz();
+        } else {
+          handleFirebaseAdd();
+        }
       }
+      QuizStore.clearQuestions();
+      data.quizName = "";
 
       formik.resetForm();
     },
@@ -130,8 +148,18 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   };
 
   useEffect(() => {
+    setQuizName(formik.values.quizName);
+  }, [formik.values.quizName]);
+
+  useEffect(() => {
     setQuizQuestions(QuizStore.questions);
   }, [QuizStore.questions]);
+
+  useEffect(() => {
+    if (QuizStore.selectedQuiz) {
+      formik.values.quizName = QuizStore.selectedQuiz.quiz.quizName;
+    }
+  }, [QuizStore.selectedQuizID]);
 
   return (
     <div className="card--center mt-6">
@@ -143,7 +171,9 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
         >
           <div className="flex flex-row align-items-center justify-content-between">
             <div className="create-quiz__title-wrapper">
-              <h2 className="create-quiz__title">New quiz</h2>
+              <h2 className="create-quiz__title">
+                {QuizStore.selectedQuizID ? "Edit quiz" : "New quiz"}
+              </h2>
               <p className="create-quiz__subtitle">
                 Create a new quiz or check back on the ones that are already
                 created.
@@ -157,7 +187,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
               />
               <Button
                 type="submit"
-                label="Create quiz"
+                label={QuizStore.selectedQuizID ? "Update quiz" : "Create quiz"}
                 className="button__common-style button__create-quiz-create"
               />
             </div>

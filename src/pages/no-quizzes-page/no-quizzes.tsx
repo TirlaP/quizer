@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./no-quizzes.scss";
 import "../../styles/buttons.scss";
+import { WelcomeMessage } from "../../common/components/homepage/welcome-message/welcome-message";
 
 interface NoQuizzesProps {}
 
@@ -25,13 +26,7 @@ export const NoQuizzes: React.FC<NoQuizzesProps> = ({}) => {
   return (
     <div className="no-quizzes">
       <div className="no-quizzes__content-wrapper">
-        <div className="no-quizzes__welcome">
-          <h2>Welcome to Quizer!</h2>
-          <p className="no-quizzes__small-text">
-            Create a new quiz or check back on the ones that are already
-            created.
-          </p>
-        </div>
+        <WelcomeMessage />
         <div className="card--center mt-6">
           <Card title="No quizzes" footer={Footer} className="no-quizzes__card">
             <p

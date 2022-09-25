@@ -8,8 +8,14 @@ export interface QuestionItem {
   completed: boolean;
 }
 
+export interface QuizItem {
+  [key: string]: any;
+}
+
 export class QuizStoreImpl {
+  quizzes: QuizItem[] = [];
   questions: QuestionItem[] = [];
+  selectedQuizID?: string;
   selectedQuestionID?: string;
 
   constructor() {
@@ -45,6 +51,10 @@ export class QuizStoreImpl {
     this.questions = this.questions.filter((Question) => Question.id !== id);
   }
 
+  clearQuestions() {
+    this.questions = [];
+  }
+
   toggleQuestion(id: string) {
     const index = this.questions.findIndex((item) => item.id === id);
     if (index > -1) {
@@ -52,14 +62,34 @@ export class QuizStoreImpl {
     }
   }
 
+  setFetchedFirebaseQuizzes(fetchedQuizzes: QuizItem[]) {
+    this.quizzes = [...fetchedQuizzes];
+  }
+
+  selectQuiz(quizId: string) {
+    this.selectedQuizID = quizId;
+  }
+  deselectQuiz() {
+    this.selectedQuizID = "";
+  }
+
   selectQuestion(question: QuestionItem | null) {
     this.selectedQuestionID = question?.id;
+  }
+  deselectQuestion() {
+    this.selectedQuestionID = "";
   }
 
   get selectedQuestion() {
     return this.questions.find(
       (question) => question.id === this.selectedQuestionID
     );
+  }
+
+  get selectedQuiz() {
+    console.log(toJS(this.quizzes));
+    console.log(this.selectedQuestionID);
+    return this.quizzes.find((quiz) => quiz.id === this.selectedQuizID);
   }
 
   get status() {

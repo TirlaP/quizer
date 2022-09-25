@@ -161,6 +161,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
   useEffect(() => {
     if (QuizStore.selectedQuestion) {
+      console.log(toJS(QuizStore.questions));
       setAnswerList(QuizStore.selectedQuestion.question?.answerList || []);
       formik.values.answerList =
         QuizStore.selectedQuestion?.question?.answerList;
@@ -174,6 +175,12 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         QuizStore.selectedQuestion?.question?.questionName;
     }
   }, [QuizStore.selectedQuestionID]);
+
+  useEffect(() => {
+    if (QuizStore.selectedQuiz) {
+      QuizStore.questions = QuizStore.selectedQuiz?.quiz.quizQuestions;
+    }
+  }, [QuizStore.selectedQuizID]);
 
   const QuestionHeaderCard = (
     <div className="flex flex-row align-items-center justify-content-between">
