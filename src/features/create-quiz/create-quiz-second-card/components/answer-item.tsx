@@ -31,7 +31,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
   return (
     <div className="create-quiz__answer">
       <label htmlFor="question" className="create-quiz__input-label">
-        Answer {`0${index + 1}`}*
+        Answer {index < 9 ? `0${index + 1}` : `${index + 1}`}*
       </label>
       <div className="flex flex-row align-items-center gap-3">
         <InputText

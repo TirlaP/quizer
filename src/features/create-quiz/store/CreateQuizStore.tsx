@@ -16,7 +16,7 @@ export class QuizStoreImpl {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addQuestion(question: Question | null, isCorrectResponse: number | null) {
+  addQuestion(question: Question | null, correctResponseIndex: number | null) {
     const item: QuestionItem = {
       id: uuid(),
       question,
@@ -24,7 +24,7 @@ export class QuizStoreImpl {
     };
 
     item.question?.answerList.map((answer, index) =>
-      index === isCorrectResponse
+      index === correctResponseIndex
         ? (answer.isCorrectAnswer = true)
         : (answer.isCorrectAnswer = false)
     );
