@@ -28,7 +28,9 @@ export interface AnswersList {
 }
 
 export const CreateQuizSecondCard: React.FC = observer(() => {
-  const [radio, setRadio] = useState<number | null>(null);
+  const [correctResponseIndexRadio, setCorrectResponseIndexRadio] = useState<
+    number | null
+  >(null);
   const [answerList, setAnswerList] = useState<AnswersList[]>([
     {
       isCorrectAnswer: true,
@@ -43,7 +45,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   ];
 
   const handleRadioChange = (id: number) => {
-    setRadio(id);
+    setCorrectResponseIndexRadio(id);
   };
 
   const handleAnswerInputChange = (value: any, index: number) => {
@@ -61,14 +63,15 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   };
 
   const removeAnswer = (index: number) => {
-    let newList = answerList.filter((_, answerIndex) => answerIndex !== index);
+    let newList = answerList;
+    newList.splice(index, 1);
     setAnswerList([...newList]);
   };
 
   const handleFirebaseAdd = async () => {
     try {
       await addDoc(collection(db, "questions"), {
-        question: { ...formik.values, answerList, radio },
+        question: { ...formik.values, answerList, correctResponseIndexRadio },
         timeStamp: serverTimestamp(),
       });
     } catch (err) {
@@ -118,7 +121,10 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           });
           handleFirebaseAdd();
         } else {
-          QuizStore.addQuestion({ ...formik.values, answerList }, radio);
+          QuizStore.addQuestion(
+            { ...formik.values, answerList },
+            correctResponseIndexRadio
+          );
         }
 
         data.questionName = "";
@@ -153,11 +159,11 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
   useEffect(() => {
     formik.values.answerList.map((answer: any, index: number) =>
-      index === radio
+      index === correctResponseIndexRadio
         ? (answer.isCorrectAnswer = true)
         : (answer.isCorrectAnswer = false)
     );
-  }, [radio]);
+  }, [correctResponseIndexRadio]);
 
   useEffect(() => {
     if (QuizStore.selectedQuestion) {
