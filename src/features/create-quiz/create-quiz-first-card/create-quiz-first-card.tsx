@@ -19,7 +19,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase-config";
-import { IInputErrors, IQuestionItem } from "../../../common/models/model";
+import { IInputErrors } from "../../../common/models/model";
 import {
   isFormFieldValid,
   showSuccess,
@@ -32,7 +32,6 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   const toast = useRef<Toast>(null);
 
   const [quizName, setQuizName] = useState("");
-  const [quizQuestions, setQuizQuestions] = useState<IQuestionItem[]>([]);
 
   const handleCancel = () => {
     QuizStore.deselectQuiz();
@@ -157,10 +156,6 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   useEffect(() => {
     setQuizName(formik.values.quizName);
   }, [formik.values.quizName]);
-
-  useEffect(() => {
-    setQuizQuestions(toJS(QuizStore.questions.slice(0, -1)));
-  }, [QuizStore.questions]);
 
   useEffect(() => {
     if (QuizStore.selectedQuiz) {
