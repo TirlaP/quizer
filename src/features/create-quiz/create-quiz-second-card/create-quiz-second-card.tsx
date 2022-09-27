@@ -109,13 +109,6 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
             });
           }
         }
-        // else {
-        //   QuizStore.addQuestion(
-        //     { ...formik.values, answerList },
-        //     correctResponseIndexRadio
-        //   );
-        //   QuizStore.addEmptyQuestion();
-        // }
 
         data.questionName = "";
         formik.values.questionType = "";
