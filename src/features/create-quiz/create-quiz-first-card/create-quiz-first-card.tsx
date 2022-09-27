@@ -9,6 +9,7 @@ import { Toast } from "primereact/toast";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../store/CreateQuizStore";
+import { LoginStore } from "../../authentication/login/store/LoginStore";
 import { toJS } from "mobx";
 
 import {
@@ -89,6 +90,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
                 quizQuestions: toJS(QuizStore.questions.slice(0, -1)),
               },
               timeStamp: serverTimestamp(),
+              creatorId: `${LoginStore.login.user.uid}`,
             })
           : await updateDoc(doc(db, "quizzes", QuizStore.selectedQuiz?.id), {
               quiz: {

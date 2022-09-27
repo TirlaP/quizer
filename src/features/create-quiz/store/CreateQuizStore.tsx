@@ -94,6 +94,7 @@ export class QuizStoreImpl {
   }
 
   selectQuestion(question: IQuestionItem | null) {
+    console.log("AAA", toJS(question));
     this.selectedQuestionID = question?.id;
   }
   deselectQuestion() {

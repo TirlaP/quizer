@@ -263,11 +263,13 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
           <div className="flex flex-row justify-content-between create-quiz__footer-buttons mt-4">
             <div>
-              <Button
-                style={{ width: "167px" }}
-                label="Remove"
-                className="button__common-style button__create-quiz-remove"
-              />
+              {QuizStore.questions.length > 1 && (
+                <Button
+                  style={{ width: "167px" }}
+                  label="Remove"
+                  className="button__common-style button__create-quiz-remove"
+                />
+              )}
             </div>
             <div className="create-quiz__button-wrapper">
               <Button
