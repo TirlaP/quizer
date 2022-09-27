@@ -9,15 +9,13 @@ import edit_icon from "../../common/assets/edit-icon.svg";
 import sword_icon from "../../common/assets/sword_icon.png";
 
 import { Button } from "primereact/button";
-import { QuizCard } from "../../common/components/homepage/quiz-card/quiz-card";
 import { Card } from "primereact/card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import { LoginStore } from "../../features/authentication/login/store/LoginStore";
 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
 import { QuizStore } from "../../features/create-quiz/store/CreateQuizStore";
-import { toJS } from "mobx";
 
 interface QuizListProps {}
 
@@ -49,19 +47,21 @@ export const QuizList: React.FC<QuizListProps> = () => {
   }, []);
 
   useEffect(() => {
-    console.log(quizzes);
     QuizStore.setFetchedFirebaseQuizzes(quizzes);
   }, [quizzes]);
 
   return (
-    <div className="no-quizzes quiz-list">
+    <div className="no-quizzes quiz-list mb-5">
       <div className="no-quizzes__content-wrapper flex flex-column gap-6">
         <div className="flex flex-row align-items-center justify-content-between">
           <WelcomeMessage />
           <Button
             label="Create quiz"
             className="button__common-style button__create-quiz-create"
-            onClick={() => navigate("/create-quiz")}
+            onClick={() => {
+              navigate("/create-quiz");
+              QuizStore.addEmptyQuestion();
+            }}
           />
         </div>
         <div className="quiz-list__card-row">
@@ -69,7 +69,6 @@ export const QuizList: React.FC<QuizListProps> = () => {
             <Card
               key={index}
               className="quiz-list__card quiz-list__card-column"
-              onClick={() => QuizStore.selectQuiz(quiz.id)}
             >
               <div className="quiz-list__card-wrapper">
                 <div className="quiz-list__card-header">
@@ -92,7 +91,13 @@ export const QuizList: React.FC<QuizListProps> = () => {
                   <Button
                     className="button__common-style button__edit-quiz"
                     onClick={() => {
-                      navigate("/create-quiz");
+                      QuizStore.selectQuiz(quiz.id);
+                      navigate({
+                        pathname: "/create-quiz",
+                        search: createSearchParams({
+                          quizId: `${quiz.id}`,
+                        }).toString(),
+                      });
                     }}
                   >
                     <img

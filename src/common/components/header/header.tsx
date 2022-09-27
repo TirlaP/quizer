@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = observer(() => {
           {!mobile && (
             <ul className="menu__items navbar__items">
               <li className="navbar__item">
-                <Link to="/">
+                <Link to="/homepage">
                   <span>Home</span>
                 </Link>
               </li>
@@ -134,7 +134,7 @@ export const Header: React.FC<HeaderProps> = observer(() => {
         {mobile && (
           <ul className="menu__items sidebar__items">
             <li className="sidebar__item">
-              <Link to="/">
+              <Link to="/homepage">
                 <span>Home</span>
               </Link>
             </li>

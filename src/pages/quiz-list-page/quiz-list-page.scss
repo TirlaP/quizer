@@ -67,4 +67,10 @@
       grid-template-columns: 1fr;
     }
   }
+
+  @media screen and (min-width: 1950px) {
+    .quiz-list__card-row {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
 }

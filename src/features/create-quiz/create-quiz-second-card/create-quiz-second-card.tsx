@@ -9,29 +9,21 @@ import { AnswerItem } from "./components/answer-item";
 import { observer } from "mobx-react";
 import { QuizStore } from "../store/CreateQuizStore";
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../../../config/firebase-config";
 import { toJS } from "mobx";
 
-export interface Question {
-  answerList: AnswersList[];
-  questionName?: string;
-  questionType: string | null;
-}
-export interface InputErrors {
-  [key: string]: string;
-}
-
-export interface AnswersList {
-  isCorrectAnswer?: boolean;
-  answerName: string;
-}
+import {
+  IQuestion,
+  IInputErrors,
+  IAnswersList,
+} from "../../../common/models/model";
+import { isFormFieldValid } from "../../../common/services/util-service";
 
 export const CreateQuizSecondCard: React.FC = observer(() => {
   const [correctResponseIndexRadio, setCorrectResponseIndexRadio] = useState<
     number | null
   >(null);
-  const [answerList, setAnswerList] = useState<AnswersList[]>([
+
+  const [answerList, setAnswerList] = useState<IAnswersList[]>([
     {
       isCorrectAnswer: true,
       answerName: "",
@@ -68,18 +60,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     setAnswerList([...newList]);
   };
 
-  const handleFirebaseAdd = async () => {
-    try {
-      await addDoc(collection(db, "questions"), {
-        question: { ...formik.values, answerList, correctResponseIndexRadio },
-        timeStamp: serverTimestamp(),
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const initialValues: Question = {
+  const initialValues: IQuestion = {
     answerList: [
       {
         isCorrectAnswer: true,
@@ -94,7 +75,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     initialValues,
 
     validate: (data) => {
-      let errors: InputErrors = {} as InputErrors;
+      let errors: IInputErrors = {} as IInputErrors;
 
       if (!data.questionType) {
         errors.questionType = "Question type is required.";
@@ -115,17 +96,26 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     onSubmit: (data) => {
       if (Object.keys(formik.errors).length === 0) {
         if (QuizStore.selectedQuestionID) {
-          QuizStore.editQuestion(QuizStore.selectedQuestionID, {
-            ...formik.values,
-            answerList,
-          });
-          handleFirebaseAdd();
-        } else {
-          QuizStore.addQuestion(
-            { ...formik.values, answerList },
-            correctResponseIndexRadio
-          );
+          if (QuizStore.selectedQuestionIsEmpty) {
+            QuizStore.editQuestion(QuizStore.selectedQuestionID, {
+              ...formik.values,
+              answerList,
+            });
+            QuizStore.addEmptyQuestion();
+          } else {
+            QuizStore.editQuestion(QuizStore.selectedQuestionID, {
+              ...formik.values,
+              answerList,
+            });
+          }
         }
+        // else {
+        //   QuizStore.addQuestion(
+        //     { ...formik.values, answerList },
+        //     correctResponseIndexRadio
+        //   );
+        //   QuizStore.addEmptyQuestion();
+        // }
 
         data.questionName = "";
         formik.values.questionType = "";
@@ -141,17 +131,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     },
   });
 
-  const isFormFieldValid = (name: any) => {
-    if (name.toLowerCase().includes("answer".toLocaleLowerCase())) {
-      return !!formik.errors[name];
-    } else {
-      return !!(formik.errors[name] && formik.touched[name]);
-    }
-  };
-
   const getFormErrorMessage = (name: any) => {
     return (
-      isFormFieldValid(name) && (
+      isFormFieldValid(name, formik) && (
         <small className="p-error">{formik.errors[name]}</small>
       )
     );
@@ -167,7 +149,6 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
   useEffect(() => {
     if (QuizStore.selectedQuestion) {
-      console.log(toJS(QuizStore.questions));
       setAnswerList(QuizStore.selectedQuestion.question?.answerList || []);
       formik.values.answerList =
         QuizStore.selectedQuestion?.question?.answerList;
@@ -185,6 +166,15 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   useEffect(() => {
     if (QuizStore.selectedQuiz) {
       QuizStore.questions = QuizStore.selectedQuiz?.quiz.quizQuestions;
+
+      if (!QuizStore.isAnyEmptyQuestion) {
+        QuizStore.addEmptyQuestion();
+      } else {
+        QuizStore.addEmptyQuestion();
+      }
+
+      // Automatically select first question when enter the "Edit-page"
+      QuizStore.selectQuestion(QuizStore.questions[0]);
     }
   }, [QuizStore.selectedQuizID]);
 
@@ -192,7 +182,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     <div className="flex flex-row align-items-center justify-content-between">
       <div className="create-quiz__title-wrapper">
         <h2 className="create-quiz__title">
-          {QuizStore.selectedQuestionID ? "Edit question" : "New question"}
+          {QuizStore.selectedQuestionID && !QuizStore.selectedQuestionIsEmpty
+            ? "Edit question"
+            : "New question"}
         </h2>
       </div>
       <div className="flex flex-column align-items-start">
@@ -204,7 +196,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           onChange={formik.handleChange}
           optionLabel="name"
           className={`create-quiz__dropdown ${
-            isFormFieldValid("questionType") ? "create-quiz__input-error" : ""
+            isFormFieldValid("questionType", formik)
+              ? "create-quiz__input-error"
+              : ""
           }`}
           placeholder="Question type"
         />
@@ -225,7 +219,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
               <label
                 htmlFor="question"
                 className={`create-quiz__input-label ${
-                  isFormFieldValid("questionName") ? "" : "p-error"
+                  isFormFieldValid("questionName", formik) ? "" : "p-error"
                 }`}
               >
                 Question*
@@ -234,7 +228,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                 id="questionName"
                 style={{ width: "640px" }}
                 className={`create-quiz__input ${
-                  isFormFieldValid("questionName")
+                  isFormFieldValid("questionName", formik)
                     ? "create-quiz__input-error"
                     : ""
                 }`}

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useFormik } from "formik";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -6,14 +8,23 @@ import { Card } from "primereact/card";
 import { Toast } from "primereact/toast";
 
 import { observer } from "mobx-react";
-import { QuestionItem, QuizStore } from "../store/CreateQuizStore";
+import { QuizStore } from "../store/CreateQuizStore";
+import { toJS } from "mobx";
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../../config/firebase-config";
-import { useNavigate } from "react-router-dom";
-export interface InputErrors {
-  [key: string]: string;
-}
+import { IInputErrors, IQuestionItem } from "../../../common/models/model";
+import {
+  isFormFieldValid,
+  showSuccess,
+  showError,
+} from "../../../common/services/util-service";
 
 export const CreateQuizFirstCard: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -21,26 +32,11 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   const toast = useRef<Toast>(null);
 
   const [quizName, setQuizName] = useState("");
-  const [quizQuestions, setQuizQuestions] = useState<QuestionItem[]>([]);
+  const [quizQuestions, setQuizQuestions] = useState<IQuestionItem[]>([]);
 
-  const showSuccess = (message: string) => {
-    if (toast) {
-      toast.current?.show({
-        severity: "success",
-        summary: "Success Message",
-        detail: `${message}`,
-        life: 3000,
-      });
-    }
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: "Message Content",
-      life: 3000,
-    });
+  const handleCancel = () => {
+    QuizStore.deselectQuiz();
+    navigate("/homepage");
   };
 
   const showConfirm = () => {
@@ -59,10 +55,22 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
           </div>
           <div className="grid p-fluid">
             <div className="col-6">
-              <Button type="button" label="Yes" className="p-button-success" />
+              <Button
+                type="button"
+                label="Yes"
+                className="p-button-success"
+                onClick={handleCancel}
+              />
             </div>
             <div className="col-6">
-              <Button type="button" label="No" className="p-button-secondary" />
+              <Button
+                type="button"
+                label="No"
+                className="p-button-secondary"
+                onClick={() => {
+                  toast.current?.clear();
+                }}
+              />
             </div>
           </div>
         </div>
@@ -70,32 +78,40 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
     });
   };
 
-  const handleFirebaseAdd = async () => {
+  const handleFirebaseCrudMethod = async (methodType: string) => {
+    const quizzesCollectionRef = collection(db, "quizzes");
+
     try {
-      if (quizQuestions.length > 0) {
-        await addDoc(collection(db, "quizzes"), {
-          quiz: { quizName, quizQuestions },
-          timeStamp: serverTimestamp(),
-        });
-        showSuccess("Quiz has been created successfuly.");
+      if (QuizStore.questions.length > 1) {
+        methodType === "add"
+          ? await addDoc(quizzesCollectionRef, {
+              quiz: {
+                quizName,
+                quizQuestions: toJS(QuizStore.questions.slice(0, -1)),
+              },
+              timeStamp: serverTimestamp(),
+            })
+          : await updateDoc(doc(db, "quizzes", QuizStore.selectedQuiz?.id), {
+              quiz: {
+                quizName,
+                quizQuestions: toJS(QuizStore.questions.slice(0, -1)),
+              },
+              timeStamp: serverTimestamp(),
+            });
+        showSuccess(
+          `Quiz has been ${
+            methodType === "add" ? "created" : "updated"
+          } successfuly.`,
+          toast
+        );
         navigate("/homepage");
       } else {
         console.log("No questions");
-        showError();
+        showError("No questions", toast);
       }
     } catch (err) {
       console.log(err);
-      showError();
-    }
-  };
-
-  const handleFirebaseUpdate = async () => {
-    try {
-      showSuccess("Quiz has been updated successfuly.");
-      setTimeout(() => {}, 1000);
-      navigate("/homepage");
-    } catch (err) {
-      showError();
+      showError("Other error", toast);
     }
   };
 
@@ -107,7 +123,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
     initialValues,
 
     validate: (data) => {
-      let errors: InputErrors = {} as InputErrors;
+      let errors: IInputErrors = {} as IInputErrors;
 
       if (!data.quizName) {
         errors.quizName = "Quiz name is required.";
@@ -118,30 +134,21 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
     onSubmit: (data) => {
       if (Object.keys(formik.errors).length === 0) {
         if (QuizStore.selectedQuizID) {
-          handleFirebaseUpdate();
+          handleFirebaseCrudMethod("update");
           QuizStore.deselectQuiz();
         } else {
-          handleFirebaseAdd();
+          handleFirebaseCrudMethod("add");
         }
       }
-      QuizStore.clearQuestions();
       data.quizName = "";
 
       formik.resetForm();
     },
   });
 
-  const isFormFieldValid = (name: any) => {
-    if (name.toLowerCase().includes("answer".toLocaleLowerCase())) {
-      return !!formik.errors[name];
-    } else {
-      return !!(formik.errors[name] && formik.touched[name]);
-    }
-  };
-
   const getFormErrorMessage = (name: any) => {
     return (
-      isFormFieldValid(name) && (
+      isFormFieldValid(name, formik) && (
         <small className="p-error">{formik.errors[name]}</small>
       )
     );
@@ -152,7 +159,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   }, [formik.values.quizName]);
 
   useEffect(() => {
-    setQuizQuestions(QuizStore.questions);
+    setQuizQuestions(toJS(QuizStore.questions.slice(0, -1)));
   }, [QuizStore.questions]);
 
   useEffect(() => {
@@ -182,6 +189,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
             <div className="create-quiz__button-wrapper">
               <Button
                 onClick={showConfirm}
+                type="button"
                 label="Cancel"
                 className="button__common-style button__create-quiz-cancel"
               />
@@ -197,7 +205,9 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
             <InputText
               id="quizName"
               className={`create-quiz__input ${
-                isFormFieldValid("quizName") ? "create-quiz__input-error" : ""
+                isFormFieldValid("quizName", formik)
+                  ? "create-quiz__input-error"
+                  : ""
               }`}
               placeholder="Enter quiz name"
               value={formik.values.quizName}

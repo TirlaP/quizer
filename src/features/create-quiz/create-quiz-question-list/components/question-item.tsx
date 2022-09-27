@@ -4,7 +4,6 @@ import { Button } from "primereact/button";
 
 import { observer } from "mobx-react";
 import { QuizStore } from "../../store/CreateQuizStore";
-import { toJS } from "mobx";
 
 interface QuestionItemProps {
   questionName: string;
