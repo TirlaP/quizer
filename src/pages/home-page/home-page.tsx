@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoQuizzes } from "../no-quizzes-page/no-quizzes";
 import { QuizList } from "../quiz-list-page/quiz-list-page";
-import CircleLoader from "react-spinners/CircleLoader";
 
 import "../../styles/buttons.scss";
 import "./home-page.scss";
@@ -15,7 +14,7 @@ import { LoginStore } from "../../features/authentication/login/store/LoginStore
 
 interface HomePageProps {}
 
-export const HomePage: React.FC<HomePageProps> = ({}) => {
+export const HomePage: React.FC<HomePageProps> = () => {
   const [quizzes, setQuizzes] = useState<{ [key: string]: any }[]>([]);
   const quizzesCollectionRef = collection(db, "quizzes");
 
@@ -41,7 +40,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         id: doc.id,
       }));
       setQuizzes(fetchedData);
-      QuizStore.setFetchedFirebaseQuizzes(fetchedData);
+      QuizStore.setQuizzes(fetchedData);
 
       // setLoading(false);
     };

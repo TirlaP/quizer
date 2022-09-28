@@ -63,7 +63,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   const initialValues: IQuestion = {
     answerList: [
       {
-        isCorrectAnswer: true,
+        isCorrectAnswer: false,
         answerName: "",
       },
     ],
@@ -76,6 +76,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
     validate: (data) => {
       let errors: IInputErrors = {} as IInputErrors;
+      let isRadioButton = false;
 
       if (!data.questionType) {
         errors.questionType = "Question type is required.";
@@ -89,7 +90,14 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         if (!answer.answerName) {
           errors[`answerInput${index}`] = "Answer name is required.";
         }
+        if (answer.isCorrectAnswer) {
+          isRadioButton = true;
+        }
       });
+
+      if (!isRadioButton) {
+        errors["answerRadio"] = "Correct answer check is required.";
+      }
 
       return errors;
     },

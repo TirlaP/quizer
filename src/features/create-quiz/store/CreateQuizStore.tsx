@@ -88,9 +88,11 @@ export class QuizStoreImpl {
       completed: false,
     };
 
-    this.questions.push(item);
+    if (!this.isAnyEmptyQuestion) {
+      this.questions.push(item);
 
-    this.selectQuestion(item);
+      this.selectQuestion(item);
+    }
   }
 
   selectQuestion(question: IQuestionItem | null) {

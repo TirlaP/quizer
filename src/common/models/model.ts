@@ -2,7 +2,7 @@
  * QUIZ - INNER DATA
  */
 export interface IInputErrors {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 export interface IQuestion {

@@ -63,6 +63,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
         />
         <label htmlFor={inputId}>This is the correct answer</label>
       </div>
+      {getError("answerRadio")}
     </div>
   );
 };
