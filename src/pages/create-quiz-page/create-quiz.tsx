@@ -1,16 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./create-quiz.scss";
 import "../../styles/buttons.scss";
 import { Header } from "../../common/components/header/header";
 import { CreateQuizFirstCard } from "../../features/create-quiz/create-quiz-first-card/create-quiz-first-card";
 import { CreateQuizSecondCard } from "../../features/create-quiz/create-quiz-second-card/create-quiz-second-card";
 import { QuestionList } from "../../features/create-quiz/create-quiz-question-list/question-list";
+import { QuizStore } from "../../features/create-quiz/store/CreateQuizStore";
+
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../../config/firebase-config";
+
+import { useSearchParams } from "react-router-dom";
 
 interface CreateQuizProps {}
 
 export const CreateQuiz: React.FC<CreateQuizProps> = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const quizId = searchParams.get("quizId");
+
+    // Check for any selected quiz
+    if (quizId) {
+      const docRef = doc(db, "quizzes", quizId);
+
+      getDoc(docRef).then((doc) => {
+        QuizStore.addQuiz({
+          ...doc.data(),
+          id: doc.id,
+        });
+        QuizStore.selectQuiz(quizId);
+      });
+    } else {
+      // Add empty question item on refresh of "New quiz" page
+      if (!QuizStore.isAnyEmptyQuestion) {
+        QuizStore.addEmptyQuestion();
+      }
+    }
+    return () => {
+      QuizStore.deselectQuiz();
+    };
+  }, []);
+
   return (
-    <div className="create-quiz flex flex-column button mb-3">
+    <div className="create-quiz flex flex-column button mb-5">
       <Header />
       <CreateQuizFirstCard />
 

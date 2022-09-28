@@ -12,9 +12,10 @@ import { LandingPage } from "./pages/landing-page/landing-page";
 import {
   PrivateRoute,
   ProtectedRouteProps,
-} from "./pages/privateRoute/private-route";
+} from "./pages/private-route/private-route";
 import { observer } from "mobx-react-lite";
 import { CreateQuiz } from "./pages/create-quiz-page/create-quiz";
+import { QuizList } from "./pages/quiz-list-page/quiz-list-page";
 
 export const App: React.FC = observer(() => {
   let defaultProtectedRouteProps: Omit<ProtectedRouteProps, "component"> = {
@@ -40,6 +41,7 @@ export const App: React.FC = observer(() => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/homepage" element={<HomePage />} />
+        <Route path="/quiz-list" element={<QuizList />} />
         <Route path="/create-quiz" element={<CreateQuiz />} />
         <Route
           path="/"

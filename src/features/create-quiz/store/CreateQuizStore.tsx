@@ -1,23 +1,21 @@
 import { makeAutoObservable, toJS } from "mobx";
-import { Question } from "../create-quiz-second-card/create-quiz-second-card";
+import { IQuestion } from "../../../common/models/model";
 import uuid from "react-uuid";
 
-export interface QuestionItem {
-  id: string;
-  question: Question | null;
-  completed: boolean;
-}
+import { IQuestionItem, IQuizItem } from "../../../common/models/model";
 
 export class QuizStoreImpl {
-  questions: QuestionItem[] = [];
+  quizzes: IQuizItem[] = [];
+  questions: IQuestionItem[] = [];
+  selectedQuizID?: string;
   selectedQuestionID?: string;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addQuestion(question: Question | null, correctResponseIndex: number | null) {
-    const item: QuestionItem = {
+  addQuestion(question: IQuestion | null, correctResponseIndex: number | null) {
+    const item: IQuestionItem = {
       id: uuid(),
       question,
       completed: false,
@@ -31,18 +29,22 @@ export class QuizStoreImpl {
     this.questions.push(item);
   }
 
-  editQuestion(questionId: string, updatedQuestion: Question | null) {
+  editQuestion(questionId: string, updatedQuestion: IQuestion | null) {
     const result = this.questions.find(
       (question) => question.id === questionId
     );
     if (result) {
       result.question = updatedQuestion;
-      this.selectedQuestionID = "";
+      this.selectQuestion(this.questions[this.questions.length - 1]);
     }
   }
 
   removeQuestion(id: string) {
     this.questions = this.questions.filter((Question) => Question.id !== id);
+  }
+
+  clearQuestions() {
+    this.questions = [];
   }
 
   toggleQuestion(id: string) {
@@ -52,14 +54,76 @@ export class QuizStoreImpl {
     }
   }
 
-  selectQuestion(question: QuestionItem | null) {
+  setQuizzes(fetchedQuizzes: IQuizItem[]) {
+    this.quizzes = [...fetchedQuizzes];
+  }
+
+  selectQuiz(quizId: string) {
+    this.selectedQuizID = quizId;
+  }
+
+  addQuiz(quiz: IQuizItem) {
+    this.quizzes.push(quiz);
+  }
+
+  deselectQuiz() {
+    this.deselectQuestion();
+    this.clearQuestions();
+    this.selectedQuizID = "";
+  }
+
+  addEmptyQuestion() {
+    const item: IQuestionItem = {
+      id: uuid(),
+      question: {
+        answerList: [
+          {
+            isCorrectAnswer: true,
+            answerName: "",
+          },
+        ],
+        questionName: "",
+        questionType: "",
+      },
+      completed: false,
+    };
+
+    this.questions.push(item);
+
+    this.selectQuestion(item);
+  }
+
+  selectQuestion(question: IQuestionItem | null) {
     this.selectedQuestionID = question?.id;
+  }
+  deselectQuestion() {
+    this.selectedQuestionID = "";
   }
 
   get selectedQuestion() {
     return this.questions.find(
       (question) => question.id === this.selectedQuestionID
     );
+  }
+
+  get selectedQuestionIsEmpty() {
+    return (
+      this.selectedQuestion?.question?.questionName === "" &&
+      this.selectedQuestion?.question?.questionType === "" &&
+      this.selectedQuestion?.question?.answerList.length === 1
+    );
+  }
+  get isAnyEmptyQuestion() {
+    return this.questions.some(
+      (question) =>
+        question.question?.questionName === "" &&
+        question.question?.questionType === "" &&
+        question.question?.answerList.length === 1
+    );
+  }
+
+  get selectedQuiz() {
+    return this.quizzes.find((quiz) => quiz.id === this.selectedQuizID);
   }
 
   get status() {

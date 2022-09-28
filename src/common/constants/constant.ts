@@ -10,3 +10,8 @@ export const RESOLUTION_BREAKPOINTS = {
   LAPTOP: 1024,
   DESKTOP: 1200,
 };
+
+export const FIREBASE_CRUD_METHOD = {
+  UPDATE: "update",
+  ADD: "add",
+};
