@@ -1,7 +1,3 @@
-export interface IGenericModel {
-  something: string;
-}
-
 /**
  * QUIZ - INNER DATA
  */

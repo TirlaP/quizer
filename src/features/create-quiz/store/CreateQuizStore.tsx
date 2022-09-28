@@ -54,7 +54,7 @@ export class QuizStoreImpl {
     }
   }
 
-  setFetchedFirebaseQuizzes(fetchedQuizzes: IQuizItem[]) {
+  setQuizzes(fetchedQuizzes: IQuizItem[]) {
     this.quizzes = [...fetchedQuizzes];
   }
 

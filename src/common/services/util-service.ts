@@ -53,3 +53,8 @@ export const showError = (message: string, toast: any) => {
     life: 3000,
   });
 };
+
+export const convertTimeStampToDate = (timeStamp: number) => {
+  let date = new Date(timeStamp * 1000);
+  return date.toLocaleDateString();
+};
