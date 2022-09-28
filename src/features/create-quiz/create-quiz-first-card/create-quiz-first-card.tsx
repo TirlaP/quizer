@@ -25,6 +25,7 @@ import {
   showSuccess,
   showError,
 } from "../../../common/services/util-service";
+import { FIREBASE_CRUD_METHOD } from "../../../common/constants/constant";
 
 export const CreateQuizFirstCard: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -133,10 +134,10 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
     onSubmit: (data) => {
       if (Object.keys(formik.errors).length === 0) {
         if (QuizStore.selectedQuizID) {
-          handleFirebaseCrudMethod("update");
+          handleFirebaseCrudMethod(FIREBASE_CRUD_METHOD.UPDATE);
           QuizStore.deselectQuiz();
         } else {
-          handleFirebaseCrudMethod("add");
+          handleFirebaseCrudMethod(FIREBASE_CRUD_METHOD.ADD);
         }
       }
       data.quizName = "";

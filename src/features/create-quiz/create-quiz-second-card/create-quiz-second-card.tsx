@@ -96,17 +96,12 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     onSubmit: (data) => {
       if (Object.keys(formik.errors).length === 0) {
         if (QuizStore.selectedQuestionID) {
-          if (QuizStore.selectedQuestionIsEmpty) {
-            QuizStore.editQuestion(QuizStore.selectedQuestionID, {
-              ...formik.values,
-              answerList,
-            });
+          QuizStore.editQuestion(QuizStore.selectedQuestionID, {
+            ...formik.values,
+            answerList,
+          });
+          if (!QuizStore.selectedQuestionIsEmpty) {
             QuizStore.addEmptyQuestion();
-          } else {
-            QuizStore.editQuestion(QuizStore.selectedQuestionID, {
-              ...formik.values,
-              answerList,
-            });
           }
         }
 
@@ -160,11 +155,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     if (QuizStore.selectedQuiz) {
       QuizStore.questions = QuizStore.selectedQuiz?.quiz.quizQuestions;
 
-      if (!QuizStore.isAnyEmptyQuestion) {
-        QuizStore.addEmptyQuestion();
-      } else {
-        QuizStore.addEmptyQuestion();
-      }
+      QuizStore.addEmptyQuestion();
 
       // Automatically select first question when enter the "Edit-page"
       QuizStore.selectQuestion(QuizStore.questions[0]);

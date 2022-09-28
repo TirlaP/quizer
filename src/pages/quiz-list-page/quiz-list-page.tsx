@@ -16,6 +16,7 @@ import { LoginStore } from "../../features/authentication/login/store/LoginStore
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
 import { QuizStore } from "../../features/create-quiz/store/CreateQuizStore";
+import { convertTimeStampToDate } from "../../common/services/util-service";
 
 interface QuizListProps {}
 
@@ -27,11 +28,6 @@ export const QuizList: React.FC<QuizListProps> = () => {
 
   const { user } = LoginStore.login;
 
-  const convertTimeStampToDate = (timeStamp: number) => {
-    let date = new Date(timeStamp * 1000);
-    return date.toLocaleDateString();
-  };
-
   useEffect(() => {
     const getQuizzes = async () => {
       const fetchedQuizzes = await getDocs(quizzesCollectionRef);
@@ -40,14 +36,14 @@ export const QuizList: React.FC<QuizListProps> = () => {
         id: doc.id,
       }));
       setQuizzes(fetchedData);
-      QuizStore.setFetchedFirebaseQuizzes(fetchedData);
+      QuizStore.setQuizzes(fetchedData);
     };
 
     getQuizzes();
   }, []);
 
   useEffect(() => {
-    QuizStore.setFetchedFirebaseQuizzes(quizzes);
+    QuizStore.setQuizzes(quizzes);
   }, [quizzes]);
 
   return (
