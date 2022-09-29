@@ -1,6 +1,8 @@
 import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
-import { classNames } from "primereact/utils";
+import { Checkbox } from "primereact/checkbox";
+import { InputTextarea } from "primereact/inputtextarea";
+
 import React from "react";
 
 interface AnswerItemProps {
@@ -13,7 +15,8 @@ interface AnswerItemProps {
   handleChange: any;
   getError: any;
   formValidation: any;
-  handleRadioChange: any;
+  handleAnswerCheckChange: any;
+  questionType: any;
 }
 
 export const AnswerItem: React.FC<AnswerItemProps> = ({
@@ -26,7 +29,8 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
   handleChange,
   getError,
   formValidation,
-  handleRadioChange,
+  handleAnswerCheckChange,
+  questionType,
 }) => {
   return (
     <div className="create-quiz__answer">
@@ -53,17 +57,42 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
       </div>
       {getError(`${name}`)}
 
-      <div className="field-radiobutton mt-2">
-        <RadioButton
-          inputId={inputId}
-          name={name}
-          value={value}
-          onChange={() => handleRadioChange(index)}
-          checked={checked}
-        />
-        <label htmlFor={inputId}>This is the correct answer</label>
-      </div>
-      {getError("answerRadio")}
+      {questionType?.name?.toLowerCase() === "single answer" && (
+        <div className="field-radiobutton mt-2">
+          <RadioButton
+            inputId={inputId}
+            name="isCorrectAnswer"
+            value={name}
+            onChange={() => handleAnswerCheckChange(index)}
+            checked={checked}
+          />
+          <label htmlFor={inputId}>This is the correct answer</label>
+        </div>
+      )}
+
+      {questionType?.name?.toLowerCase() === "multiple answers" && (
+        <div className="field-radiobutton mt-2">
+          <Checkbox
+            inputId={inputId}
+            name="isCorrectAnswer"
+            value={index}
+            onChange={() => handleAnswerCheckChange(index)}
+            checked={checked}
+          />
+          <label htmlFor={inputId}>This is the correct answer</label>
+        </div>
+      )}
+
+      {questionType?.name?.toLowerCase() === "subjective" && (
+        <div className="field-radiobutton mt-2">
+          <InputTextarea
+            name={name}
+            value={value}
+            onChange={() => handleAnswerCheckChange(index)}
+          />
+          <label htmlFor={inputId}>This is the correct answer</label>
+        </div>
+      )}
     </div>
   );
 };

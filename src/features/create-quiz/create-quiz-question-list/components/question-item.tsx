@@ -32,9 +32,6 @@ export const QuestionItem: React.FC<QuestionItemProps> = observer(
                   QuizStore.selectQuestion(
                     QuizStore.questions[QuizStore.questions.length - 1]
                   );
-                  console.log(
-                    toJS(QuizStore.questions[QuizStore.questions.length - 1])
-                  );
                 }
                 handleClick();
               }}

@@ -30,8 +30,6 @@ export const QuizList: React.FC<QuizListProps> = () => {
 
   useEffect(() => {
     const getQuizzes = async () => {
-      // const fetchedQuizzes = await getDocs(quizzesCollectionRef);
-
       // 1) Query the Firestore for Logged In admin's quizzes
       // 2) Verify if user is admin and fetch his quizzes or fetch all quizes for normal users
       const fetchedQuizzes = query(
@@ -48,11 +46,6 @@ export const QuizList: React.FC<QuizListProps> = () => {
         id: doc.id,
       }));
 
-      // const fetchedData = fetchedQuizzes.docs.map((doc) => ({
-      //   ...doc.data(),
-      //   id: doc.id,
-      // }));
-      console.log(fetchedData);
       setQuizzes(fetchedData);
       QuizStore.setQuizzes(fetchedData);
     };

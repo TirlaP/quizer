@@ -41,8 +41,6 @@ export const HomePage: React.FC<HomePageProps> = () => {
       }));
       setQuizzes(fetchedData);
       QuizStore.setQuizzes(fetchedData);
-
-      // setLoading(false);
     };
 
     getQuizzes();

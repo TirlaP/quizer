@@ -16,12 +16,20 @@ import {
 import { observer } from "mobx-react-lite";
 import { CreateQuiz } from "./pages/create-quiz-page/create-quiz";
 import { QuizList } from "./pages/quiz-list-page/quiz-list-page";
+import { LoadingScreen } from "./common/components/loading-screen/loading-screen";
+import { Layout } from "./pages/layout-page/layout";
 
 export const App: React.FC = observer(() => {
-  let defaultProtectedRouteProps: Omit<ProtectedRouteProps, "component"> = {
-    isAuthenticated: LoginStore.login.isAuthenticated,
+  let defaultProtectedRouteProps: Omit<
+    ProtectedRouteProps,
+    "isAdminRoute" | "component"
+  > = {
+    isAuthenticated: LoginStore.login?.isAuthenticated,
+    isAdmin: LoginStore.login.user?.isAdmin,
     authenticationPath: "/login",
   };
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((currentUser) => {
@@ -31,28 +39,47 @@ export const App: React.FC = observer(() => {
           LoginStore.loginSucces({ ...currentUser, isAdmin });
         });
       }
+      setLoading(false);
     });
   }, []);
 
   return (
     <div className="App">
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/homepage" element={<HomePage />} />
-        <Route path="/quiz-list" element={<QuizList />} />
-        <Route path="/create-quiz" element={<CreateQuiz />} />
-        <Route
-          path="/"
-          element={
-            <PrivateRoute
-              {...defaultProtectedRouteProps}
-              component={<LandingPage />}
-            />
-          }
-        />
-      </Routes>
+      {loading ? (
+        <div className="home-page">
+          <Layout>
+            <LoadingScreen loading />
+          </Layout>
+        </div>
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/quiz-list" element={<QuizList />} />
+          <Route
+            path="/create-quiz"
+            element={
+              <PrivateRoute
+                {...defaultProtectedRouteProps}
+                isAdminRoute={true}
+                component={<CreateQuiz />}
+              />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute
+                {...defaultProtectedRouteProps}
+                isAdminRoute={false}
+                component={<LandingPage />}
+              />
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 });

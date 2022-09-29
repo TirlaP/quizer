@@ -163,6 +163,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
   useEffect(() => {
     if (QuizStore.selectedQuiz) {
       formik.values.quizName = QuizStore.selectedQuiz.quiz.quizName;
+      setQuizName(QuizStore.selectedQuiz.quiz.quizName);
     }
   }, [QuizStore.selectedQuizID]);
 
@@ -208,7 +209,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
                   : ""
               }`}
               placeholder="Enter quiz name"
-              value={formik.values.quizName}
+              value={quizName}
               onChange={formik.handleChange}
             />
             {getFormErrorMessage("quizName")}
