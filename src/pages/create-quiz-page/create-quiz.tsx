@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./create-quiz.scss";
 import "../../styles/buttons.scss";
 import { CreateQuizFirstCard } from "../../features/create-quiz/create-quiz-first-card/create-quiz-first-card";
@@ -11,13 +11,11 @@ import { db } from "../../config/firebase-config";
 
 import { useSearchParams } from "react-router-dom";
 import { Layout } from "../layout-page/layout";
-import { LoadingScreen } from "../../common/components/loading-screen/loading-screen";
 
 interface CreateQuizProps {}
 
 export const CreateQuiz: React.FC<CreateQuizProps> = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const quizId = searchParams.get("quizId");
@@ -33,7 +31,6 @@ export const CreateQuiz: React.FC<CreateQuizProps> = () => {
         });
         QuizStore.selectQuiz(quizId);
       });
-      setLoading(false);
     } else {
       // Add empty question item on refresh of "New quiz" page
       if (!QuizStore.isAnyEmptyQuestion) {
@@ -47,23 +44,15 @@ export const CreateQuiz: React.FC<CreateQuizProps> = () => {
 
   return (
     <div className="create-quiz flex flex-column button mb-5">
-      {loading ? (
-        <div className="home-page">
-          <Layout>
-            <LoadingScreen loading />
-          </Layout>
+      <Layout>
+        <CreateQuizFirstCard />
+
+        <div className="flex flex-row card--center mt-6 gap-3 create-quiz__bottom-section">
+          <CreateQuizSecondCard />
+
+          <QuestionList />
         </div>
-      ) : (
-        <Layout>
-          <CreateQuizFirstCard />
-
-          <div className="flex flex-row card--center mt-6 gap-3 create-quiz__bottom-section">
-            <CreateQuizSecondCard />
-
-            <QuestionList />
-          </div>
-        </Layout>
-      )}
+      </Layout>
     </div>
   );
 };

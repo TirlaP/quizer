@@ -78,12 +78,12 @@ export class QuizStoreImpl {
       question: {
         answerList: [
           {
-            isCorrectAnswer: true,
+            isCorrectAnswer: false,
             answerName: "",
           },
         ],
         questionName: "",
-        questionType: "",
+        questionType: "single",
       },
       completed: false,
     };
@@ -111,7 +111,6 @@ export class QuizStoreImpl {
   get selectedQuestionIsEmpty() {
     return (
       this.selectedQuestion?.question?.questionName === "" &&
-      this.selectedQuestion?.question?.questionType === "" &&
       this.selectedQuestion?.question?.answerList.length === 1
     );
   }
@@ -119,7 +118,6 @@ export class QuizStoreImpl {
     return this.questions.some(
       (question) =>
         question.question?.questionName === "" &&
-        question.question?.questionType === "" &&
         question.question?.answerList.length === 1
     );
   }

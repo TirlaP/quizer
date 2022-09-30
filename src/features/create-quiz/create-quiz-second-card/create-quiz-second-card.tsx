@@ -18,6 +18,7 @@ import {
 } from "../../../common/models/model";
 import { isFormFieldValid } from "../../../common/services/util-service";
 import { ValidationSchema } from "./validation-schema";
+import { QUESTION_TYPES } from "../../../common/constants/constant";
 
 export const CreateQuizSecondCard: React.FC = observer(() => {
   const [answerList, setAnswerList] = useState<IAnswersList[]>([
@@ -28,9 +29,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   ]);
 
   const questionTypes = [
-    { name: "Multiple answers" },
-    { name: "Single answer" },
-    { name: "Subjective" },
+    { name: "Multiple answers", value: "multiple" },
+    { name: "Single answer", value: "single" },
+    { name: "Subjective", value: "subjective" },
   ];
 
   const handleAnswerInputChange = (value: any, index: number) => {
@@ -53,6 +54,55 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     setAnswerList(newList);
   };
 
+  const handleDropdownChange = (value: any) => {
+    // When changing dropdown value, check for what action to take
+    formik.setFieldValue("questionType", value.value);
+    if (formik.values?.questionType !== QUESTION_TYPES.SUBJECTIVE.value) {
+      // Reset the correctAnswers when changing question type
+      setAnswerList((currentState) => {
+        let arrayCopy = [...currentState];
+        return (arrayCopy = arrayCopy.map((answer) => {
+          return {
+            ...answer,
+            isCorrectAnswer: false,
+          };
+        }));
+      });
+    }
+  };
+
+  const handleBlur = (name: string) => {
+    formik.setFieldTouched(name, true);
+  };
+
+  const changeCheckedAnswer = (index: number) => {
+    if (formik.values.questionType === QUESTION_TYPES.SINGLE.value) {
+      setAnswerList((currentState) => {
+        let arrayCopy = [...currentState];
+        arrayCopy = arrayCopy.map((answer, i) => {
+          if (i === index) {
+            return {
+              ...answer,
+              isCorrectAnswer: !answer.isCorrectAnswer,
+            };
+          } else {
+            return {
+              ...answer,
+              isCorrectAnswer: false,
+            };
+          }
+        });
+        return arrayCopy;
+      });
+    } else if (formik.values.questionType === QUESTION_TYPES.MULTIPLE.value) {
+      setAnswerList((currentState) => {
+        let arrayCopy = [...currentState];
+        arrayCopy[index].isCorrectAnswer = !arrayCopy[index].isCorrectAnswer;
+        return arrayCopy;
+      });
+    }
+  };
+
   const initialValues: IQuestion = {
     answerList: [
       {
@@ -61,7 +111,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
       },
     ],
     questionName: "",
-    questionType: "",
+    questionType: QUESTION_TYPES.SINGLE.value,
   };
 
   const formik: any = useFormik({
@@ -69,21 +119,25 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
     validate: (data) => {
       let errors: IInputErrors = {} as IInputErrors;
-      let isAnyButtonChecked = false;
 
       data.answerList?.map((answer, index) => {
-        if (!answer.answerName) {
+        if (
+          !answer.answerName &&
+          formik.values.questionType !== QUESTION_TYPES.SUBJECTIVE.value
+        ) {
+          console.log(
+            !data.answerList?.some((answer) => answer.isCorrectAnswer === true)
+          );
           errors[`answerInput${index}`] = "Answer name is required!";
-        }
-        if (answer.isCorrectAnswer) {
-          isAnyButtonChecked = true;
         }
       });
 
-      if (!isAnyButtonChecked) {
-        if (formik.values.questionType.name === "Single answer") {
+      if (!data.answerList?.find((answer) => answer.isCorrectAnswer === true)) {
+        if (formik.values.questionType === QUESTION_TYPES.SINGLE.value) {
           errors["answerRadio"] = "Correct answer check is required!";
-        } else if (formik.values.questionType.name === "Multiple answers") {
+        } else if (
+          formik.values.questionType === QUESTION_TYPES.MULTIPLE.value
+        ) {
           errors["answerRadio"] =
             "At least one correct answer check is required!";
         }
@@ -104,7 +158,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         }
 
         data.questionName = "";
-        formik.values.questionType = "";
+        formik.values.questionType = QUESTION_TYPES.SINGLE.value;
         setAnswerList([
           {
             isCorrectAnswer: false,
@@ -119,39 +173,11 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   });
 
   const getFormErrorMessage = (name: any) => {
-    return (
-      isFormFieldValid(name, formik) && (
-        <small className="p-error">{formik.errors[name]}</small>
-      )
+    const returnedValue = isFormFieldValid(name, formik) && (
+      <small className="p-error">{formik.errors[name]}</small>
     );
-  };
 
-  const changeCheckedAnswer = (index: number) => {
-    if (formik.values.questionType.name === "Single answer") {
-      setAnswerList((currentState) => {
-        let arrayCopy = [...currentState];
-        arrayCopy = arrayCopy.map((answer, i) => {
-          if (i === index) {
-            return {
-              ...answer,
-              isCorrectAnswer: !answer.isCorrectAnswer,
-            };
-          } else {
-            return {
-              ...answer,
-              isCorrectAnswer: false,
-            };
-          }
-        });
-        return arrayCopy;
-      });
-    } else if (formik.values.questionType.name === "Multiple answers") {
-      setAnswerList((currentState) => {
-        let arrayCopy = [...currentState];
-        arrayCopy[index].isCorrectAnswer = !arrayCopy[index].isCorrectAnswer;
-        return arrayCopy;
-      });
-    }
+    return returnedValue;
   };
 
   useEffect(() => {
@@ -171,6 +197,19 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
         QuizStore.selectedQuestion?.question?.questionName;
     }
   }, [QuizStore.selectedQuestionID]);
+
+  useEffect(() => {
+    if (formik.values?.questionType === QUESTION_TYPES.SUBJECTIVE.value) {
+      const newList = [
+        {
+          answerName: "",
+          isCorrectAnswer: false,
+        },
+      ];
+      formik.setFieldValue("answerList", [...newList]);
+      setAnswerList([...newList]);
+    }
+  }, [formik.values.questionType]);
 
   useEffect(() => {
     if (QuizStore.selectedQuiz) {
@@ -198,7 +237,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           name="questionType"
           value={formik.values.questionType}
           options={questionTypes}
-          onChange={formik.handleChange}
+          onChange={(value) => {
+            handleDropdownChange(value);
+          }}
           optionLabel="name"
           className={`create-quiz__dropdown ${
             isFormFieldValid("questionType", formik)
@@ -240,6 +281,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                 placeholder="What is your question?"
                 value={formik.values.questionName}
                 onChange={formik.handleChange}
+                // onBlur={() => handleBlur("questionName")}
               />
               {getFormErrorMessage("questionName")}
             </div>
@@ -254,6 +296,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                   value={answer.answerName}
                   handleChange={handleAnswerInputChange}
                   handleClick={removeAnswer}
+                  handleBlur={handleBlur}
                   getError={(inputName: string) =>
                     getFormErrorMessage(inputName)
                   }
@@ -263,16 +306,19 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                 />
               </div>
             ))}
-            {getFormErrorMessage("answerRadio")}
+            {formik.values.questionType !== QUESTION_TYPES.SUBJECTIVE.value &&
+              getFormErrorMessage("answerRadio")}
 
-            <div className="create-quiz__answer">
-              <Button
-                type="button"
-                label="Add answer"
-                className="button__common-style button__create-quiz-add"
-                onClick={() => addAnswer()}
-              />
-            </div>
+            {formik.values.questionType !== QUESTION_TYPES.SUBJECTIVE.value && (
+              <div className="create-quiz__answer">
+                <Button
+                  type="button"
+                  label="Add answer"
+                  className="button__common-style button__create-quiz-add"
+                  onClick={() => addAnswer()}
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex flex-row justify-content-between create-quiz__footer-buttons mt-4">
