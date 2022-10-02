@@ -13,7 +13,7 @@ import { Card } from "primereact/card";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { LoginStore } from "../../features/authentication/login/store/LoginStore";
 
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase-config";
 import { QuizStore } from "../../features/create-quiz/store/CreateQuizStore";
 import { convertTimeStampToDate } from "../../common/services/util-service";
@@ -30,11 +30,22 @@ export const QuizList: React.FC<QuizListProps> = () => {
 
   useEffect(() => {
     const getQuizzes = async () => {
-      const fetchedQuizzes = await getDocs(quizzesCollectionRef);
-      const fetchedData = fetchedQuizzes.docs.map((doc) => ({
+      // 1) Query the Firestore for Logged In admin's quizzes
+      // 2) Verify if user is admin and fetch his quizzes or fetch all quizes for normal users
+      const fetchedQuizzes = query(
+        quizzesCollectionRef,
+        where(
+          "creatorId",
+          `${LoginStore.login.user.isAdmin ? "==" : "!="}`,
+          LoginStore.login.user.isAdmin ? LoginStore.login.user.uid : ""
+        )
+      );
+      const querySnapshot = await getDocs(fetchedQuizzes);
+      const fetchedData = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
+
       setQuizzes(fetchedData);
       QuizStore.setQuizzes(fetchedData);
     };
@@ -51,14 +62,16 @@ export const QuizList: React.FC<QuizListProps> = () => {
       <div className="no-quizzes__content-wrapper flex flex-column gap-6">
         <div className="flex flex-row align-items-center justify-content-between">
           <WelcomeMessage />
-          <Button
-            label="Create quiz"
-            className="button__common-style button__create-quiz-create"
-            onClick={() => {
-              navigate("/create-quiz");
-              QuizStore.addEmptyQuestion();
-            }}
-          />
+          {LoginStore.login.user.isAdmin && (
+            <Button
+              label="Create quiz"
+              className="button__common-style button__create-quiz-create"
+              onClick={() => {
+                navigate("/create-quiz");
+                QuizStore.addEmptyQuestion();
+              }}
+            />
+          )}
         </div>
         <div className="quiz-list__card-row">
           {quizzes.map((quiz, index) => (

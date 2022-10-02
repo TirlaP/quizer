@@ -1,19 +1,33 @@
+import { onAuthStateChanged } from "firebase/auth";
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { LoginStore } from "../../features/authentication/login/store/LoginStore";
+import { auth } from "../../config/firebase-config";
 
 export type ProtectedRouteProps = {
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  isAdminRoute: boolean;
   authenticationPath: string;
   component: JSX.Element;
 };
 
 export const PrivateRoute = observer(
-  ({ isAuthenticated, authenticationPath, component }: ProtectedRouteProps) => {
-    return isAuthenticated ? (
-      component
-    ) : (
-      <Navigate to={{ pathname: authenticationPath }} />
-    );
+  ({
+    isAuthenticated,
+    isAdmin,
+    isAdminRoute,
+    authenticationPath,
+    component,
+  }: ProtectedRouteProps) => {
+    if (isAuthenticated) {
+      if (isAdminRoute && isAdmin) {
+        return component;
+      } else {
+        return <Navigate to={{ pathname: "/homepage" }} />;
+      }
+    } else {
+      return <Navigate to={{ pathname: authenticationPath }} />;
+    }
   }
 );

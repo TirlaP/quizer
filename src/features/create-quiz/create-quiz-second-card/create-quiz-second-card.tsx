@@ -17,12 +17,9 @@ import {
   IAnswersList,
 } from "../../../common/models/model";
 import { isFormFieldValid } from "../../../common/services/util-service";
+import { ValidationSchema } from "./validation-schema";
 
 export const CreateQuizSecondCard: React.FC = observer(() => {
-  const [correctResponseIndexRadio, setCorrectResponseIndexRadio] = useState<
-    number | null
-  >(null);
-
   const [answerList, setAnswerList] = useState<IAnswersList[]>([
     {
       isCorrectAnswer: true,
@@ -36,34 +33,30 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     { name: "Subjective" },
   ];
 
-  const handleRadioChange = (id: number) => {
-    setCorrectResponseIndexRadio(id);
-  };
-
   const handleAnswerInputChange = (value: any, index: number) => {
-    const newList = answerList;
+    const newList = [...answerList];
     newList[index].answerName = value;
     formik.values.answerList = [...newList];
-    setAnswerList([...newList]);
+    setAnswerList(newList);
   };
 
   const addAnswer = () => {
-    const newList = answerList;
+    const newList = [...answerList];
     newList.push({ isCorrectAnswer: false, answerName: "" });
     formik.values.answerList = [...newList];
-    setAnswerList([...newList]);
+    setAnswerList(newList);
   };
 
   const removeAnswer = (index: number) => {
-    let newList = answerList;
+    let newList = [...answerList];
     newList.splice(index, 1);
-    setAnswerList([...newList]);
+    setAnswerList(newList);
   };
 
   const initialValues: IQuestion = {
     answerList: [
       {
-        isCorrectAnswer: true,
+        isCorrectAnswer: false,
         answerName: "",
       },
     ],
@@ -76,20 +69,25 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
     validate: (data) => {
       let errors: IInputErrors = {} as IInputErrors;
-
-      if (!data.questionType) {
-        errors.questionType = "Question type is required.";
-      }
-
-      if (!data.questionName) {
-        errors.questionName = "Question name is required.";
-      }
+      let isAnyButtonChecked = false;
 
       data.answerList?.map((answer, index) => {
         if (!answer.answerName) {
-          errors[`answerInput${index}`] = "Answer name is required.";
+          errors[`answerInput${index}`] = "Answer name is required!";
+        }
+        if (answer.isCorrectAnswer) {
+          isAnyButtonChecked = true;
         }
       });
+
+      if (!isAnyButtonChecked) {
+        if (formik.values.questionType.name === "Single answer") {
+          errors["answerRadio"] = "Correct answer check is required!";
+        } else if (formik.values.questionType.name === "Multiple answers") {
+          errors["answerRadio"] =
+            "At least one correct answer check is required!";
+        }
+      }
 
       return errors;
     },
@@ -117,6 +115,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
 
       formik.resetForm();
     },
+    validationSchema: ValidationSchema,
   });
 
   const getFormErrorMessage = (name: any) => {
@@ -127,17 +126,39 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     );
   };
 
-  useEffect(() => {
-    formik.values.answerList.map((answer: any, index: number) =>
-      index === correctResponseIndexRadio
-        ? (answer.isCorrectAnswer = true)
-        : (answer.isCorrectAnswer = false)
-    );
-  }, [correctResponseIndexRadio]);
+  const changeCheckedAnswer = (index: number) => {
+    if (formik.values.questionType.name === "Single answer") {
+      setAnswerList((currentState) => {
+        let arrayCopy = [...currentState];
+        arrayCopy = arrayCopy.map((answer, i) => {
+          if (i === index) {
+            return {
+              ...answer,
+              isCorrectAnswer: !answer.isCorrectAnswer,
+            };
+          } else {
+            return {
+              ...answer,
+              isCorrectAnswer: false,
+            };
+          }
+        });
+        return arrayCopy;
+      });
+    } else if (formik.values.questionType.name === "Multiple answers") {
+      setAnswerList((currentState) => {
+        let arrayCopy = [...currentState];
+        arrayCopy[index].isCorrectAnswer = !arrayCopy[index].isCorrectAnswer;
+        return arrayCopy;
+      });
+    }
+  };
 
   useEffect(() => {
     if (QuizStore.selectedQuestion) {
-      setAnswerList(QuizStore.selectedQuestion.question?.answerList || []);
+      setAnswerList(
+        toJS(QuizStore.selectedQuestion.question?.answerList) || []
+      );
       formik.values.answerList =
         QuizStore.selectedQuestion?.question?.answerList;
     }
@@ -237,28 +258,32 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                     getFormErrorMessage(inputName)
                   }
                   formValidation={isFormFieldValid}
-                  handleRadioChange={handleRadioChange}
+                  handleAnswerCheckChange={changeCheckedAnswer}
+                  questionType={formik.values.questionType}
                 />
               </div>
             ))}
+            {getFormErrorMessage("answerRadio")}
 
             <div className="create-quiz__answer">
               <Button
                 type="button"
                 label="Add answer"
                 className="button__common-style button__create-quiz-add"
-                onClick={addAnswer}
+                onClick={() => addAnswer()}
               />
             </div>
           </div>
 
           <div className="flex flex-row justify-content-between create-quiz__footer-buttons mt-4">
             <div>
-              <Button
-                style={{ width: "167px" }}
-                label="Remove"
-                className="button__common-style button__create-quiz-remove"
-              />
+              {QuizStore.questions.length > 1 && (
+                <Button
+                  style={{ width: "167px" }}
+                  label="Remove"
+                  className="button__common-style button__create-quiz-remove"
+                />
+              )}
             </div>
             <div className="create-quiz__button-wrapper">
               <Button

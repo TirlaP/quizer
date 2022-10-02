@@ -16,6 +16,7 @@ import {
   httpsCallable,
 } from "../../../config/firebase-config";
 import { observer } from "mobx-react-lite";
+import { LoginStore } from "../login/store/LoginStore";
 
 interface RegisterFormProps {}
 
@@ -23,6 +24,7 @@ interface UserData {}
 
 export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
   const navigate = useNavigate();
+  const { isAuthenticated } = LoginStore.login;
 
   const [user, setUser] = useState<UserData | null>(null);
 
@@ -100,6 +102,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = observer(() => {
       setUser(currentUser);
     });
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/homepage");
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="register">

@@ -10,9 +10,11 @@ import "../../../styles/buttons.scss";
 
 import { observer } from "mobx-react-lite";
 import { auth } from "../../../config/firebase-config";
+import { LoginStore } from "../login/store/LoginStore";
 
 export const ForgotPasswordForm: React.FC = observer(() => {
   const navigate = useNavigate();
+  const { isAuthenticated } = LoginStore.login;
 
   const [isSubmitPress, setIsSubmitPress] = useState(false);
   const [successfulSubmit, setSuccessfulSubmit] = useState(false);
@@ -68,6 +70,12 @@ export const ForgotPasswordForm: React.FC = observer(() => {
         });
     }
   }, [formErrors, isSubmitPress]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/homepage");
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="forgot-password">
