@@ -45,7 +45,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
             id={`${name}`}
             style={{ width: "312px" }}
             className={`create-quiz__input ${
-              getError(name) ? "create-quiz__input-error" : ""
+              formValidation ? "create-quiz__input-error" : ""
             }`}
             placeholder="Enter your answer"
             value={value}
@@ -67,7 +67,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
         <div className="field-radiobutton mt-2">
           <RadioButton
             inputId={inputId}
-            name="isCorrectAnswer"
+            name="isCorrectRadio"
             value={name}
             onChange={() => handleAnswerCheckChange(index)}
             checked={checked}
@@ -81,7 +81,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
         <div className="field-radiobutton mt-2">
           <Checkbox
             inputId={inputId}
-            name="isCorrectAnswer"
+            name="isCorrectCheckbox"
             value={index}
             onChange={() => handleAnswerCheckChange(index)}
             onBlur={() => handleBlur("answerRadio")}

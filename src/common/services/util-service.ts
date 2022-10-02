@@ -22,20 +22,14 @@ export const getErrors = (values: any) => {
   return validationErrors;
 };
 
-/**
- * Ok, so, ce vreau sa fac aici?
- *
- *
- *
- */
+export const isFormFieldInvalid = (name: any, formik: any) => {
+  // console.log(formik.touched);
 
-export const isFormFieldValid = (name: any, formik: any) => {
-  console.log(formik.errors);
   if (name.toLowerCase().includes("answerInput".toLowerCase())) {
-    if (!formik.touched[name]) {
-      return !!(formik.errors[name] && formik.touched[name]);
-    } else {
+    if (formik?.touched?.[name]) {
       return !!formik.errors[name];
+    } else {
+      return false;
     }
   } else if (name.toLowerCase().includes("answerRadio".toLowerCase())) {
     return !!formik.errors[name];

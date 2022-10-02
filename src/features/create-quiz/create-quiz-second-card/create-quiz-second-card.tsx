@@ -16,7 +16,7 @@ import {
   IInputErrors,
   IAnswersList,
 } from "../../../common/models/model";
-import { isFormFieldValid } from "../../../common/services/util-service";
+import { isFormFieldInvalid } from "../../../common/services/util-service";
 import { ValidationSchema } from "./validation-schema";
 import { QUESTION_TYPES } from "../../../common/constants/constant";
 
@@ -74,6 +74,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   const handleBlur = (name: string) => {
     formik.setFieldTouched(name, true);
   };
+  const resetTouched = (name: string) => {
+    formik.setFieldTouched(name, false);
+  };
 
   const changeCheckedAnswer = (index: number) => {
     if (formik.values.questionType === QUESTION_TYPES.SINGLE.value) {
@@ -120,19 +123,21 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
     validate: (data) => {
       let errors: IInputErrors = {} as IInputErrors;
 
-      data.answerList?.map((answer, index) => {
+      console.log(toJS(data.answerList));
+
+      data.answerList?.forEach((answer, index) => {
         if (
           !answer.answerName &&
           formik.values.questionType !== QUESTION_TYPES.SUBJECTIVE.value
         ) {
-          console.log(
-            !data.answerList?.some((answer) => answer.isCorrectAnswer === true)
-          );
           errors[`answerInput${index}`] = "Answer name is required!";
         }
       });
 
-      if (!data.answerList?.find((answer) => answer.isCorrectAnswer === true)) {
+      const isAnyResponseCorrect = !!data.answerList?.find(
+        (answer) => answer.isCorrectAnswer === true
+      );
+      if (!isAnyResponseCorrect) {
         if (formik.values.questionType === QUESTION_TYPES.SINGLE.value) {
           errors["answerRadio"] = "Correct answer check is required!";
         } else if (
@@ -173,7 +178,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
   });
 
   const getFormErrorMessage = (name: any) => {
-    const returnedValue = isFormFieldValid(name, formik) && (
+    const returnedValue = isFormFieldInvalid(name, formik) && (
       <small className="p-error">{formik.errors[name]}</small>
     );
 
@@ -239,10 +244,20 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           options={questionTypes}
           onChange={(value) => {
             handleDropdownChange(value);
+            // answerList.forEach((answer) => {
+            //   resetTouched(answer.answerName);
+            // });
+            console.log(formik.errors);
+            console.log(formik.touched);
+            formik.setFieldTouched("answerList", []);
+            // formik.touched.answerList = [];
+            // formik.errors = {};
+            console.log(formik.errors);
+            console.log(formik.touched);
           }}
           optionLabel="name"
           className={`create-quiz__dropdown ${
-            isFormFieldValid("questionType", formik)
+            isFormFieldInvalid("questionType", formik)
               ? "create-quiz__input-error"
               : ""
           }`}
@@ -265,7 +280,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
               <label
                 htmlFor="question"
                 className={`create-quiz__input-label ${
-                  isFormFieldValid("questionName", formik) ? "" : "p-error"
+                  isFormFieldInvalid("questionName", formik) ? "p-error" : ""
                 }`}
               >
                 Question*
@@ -274,7 +289,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                 id="questionName"
                 style={{ width: "640px" }}
                 className={`create-quiz__input ${
-                  isFormFieldValid("questionName", formik)
+                  isFormFieldInvalid("questionName", formik)
                     ? "create-quiz__input-error"
                     : ""
                 }`}
@@ -300,7 +315,10 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                   getError={(inputName: string) =>
                     getFormErrorMessage(inputName)
                   }
-                  formValidation={isFormFieldValid}
+                  formValidation={isFormFieldInvalid(
+                    `answerInput${index}`,
+                    formik
+                  )}
                   handleAnswerCheckChange={changeCheckedAnswer}
                   questionType={formik.values.questionType}
                 />

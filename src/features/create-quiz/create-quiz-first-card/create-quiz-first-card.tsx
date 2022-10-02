@@ -22,7 +22,7 @@ import {
 import { db } from "../../../config/firebase-config";
 import { IInputErrors } from "../../../common/models/model";
 import {
-  isFormFieldValid,
+  isFormFieldInvalid,
   showSuccess,
   showError,
 } from "../../../common/services/util-service";
@@ -150,7 +150,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
 
   const getFormErrorMessage = (name: any) => {
     return (
-      isFormFieldValid(name, formik) && (
+      isFormFieldInvalid(name, formik) && (
         <small className="p-error">{formik.errors[name]}</small>
       )
     );
@@ -204,7 +204,7 @@ export const CreateQuizFirstCard: React.FC = observer(() => {
             <InputText
               id="quizName"
               className={`create-quiz__input ${
-                isFormFieldValid("quizName", formik)
+                isFormFieldInvalid("quizName", formik)
                   ? "create-quiz__input-error"
                   : ""
               }`}
