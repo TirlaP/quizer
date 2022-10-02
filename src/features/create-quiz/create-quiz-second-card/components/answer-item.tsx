@@ -90,7 +90,6 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
             value={value}
             onChange={() => handleAnswerCheckChange(index)}
           />
-          <label htmlFor={inputId}>This is the correct answer</label>
         </div>
       )}
     </div>
