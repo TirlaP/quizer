@@ -52,7 +52,6 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
             value={value}
             onChange={(event) => {
               handleChange(event.target.value, index);
-              console.log(questionType);
             }}
             onBlur={() => handleBlur(name)}
           />

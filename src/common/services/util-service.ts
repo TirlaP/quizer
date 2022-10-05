@@ -22,15 +22,7 @@ export const getErrors = (values: any) => {
   return validationErrors;
 };
 
-/**
- * Ok, so, ce vreau sa fac aici?
- *
- *
- *
- */
-
 export const isFormFieldValid = (name: any, formik: any) => {
-  console.log(formik.errors);
   if (name.toLowerCase().includes("answerInput".toLowerCase())) {
     if (!formik.touched[name]) {
       return !!(formik.errors[name] && formik.touched[name]);

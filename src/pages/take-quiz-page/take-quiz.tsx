@@ -116,7 +116,6 @@ export const TakeQuiz: React.FC<TakeQuizProps> = ({}) => {
 
   useEffect(() => {
     if (QuizStore.activeQuestion?.answerList) {
-      console.log(toJS(QuizStore.activeQuestion?.answerList));
       setQuestionAnswers(
         QuizStore.activeQuestion?.answerList.map((answer) => {
           return {
@@ -196,7 +195,6 @@ export const TakeQuiz: React.FC<TakeQuizProps> = ({}) => {
                             value={`answer${indexAns}`}
                             onChange={() => {
                               changeCheckedAnswer(question, indexAns);
-                              console.log(toJS(question));
                             }}
                             checked={answer.isCorrectAnswer || false}
                           />
@@ -247,7 +245,6 @@ export const TakeQuiz: React.FC<TakeQuizProps> = ({}) => {
                 disabled={index === 0}
                 onClick={() => {
                   changeElement("previous");
-                  console.log(toJS(question));
                 }}
                 className="button__common-style button__take-quiz-previous"
               >
@@ -280,7 +277,6 @@ export const TakeQuiz: React.FC<TakeQuizProps> = ({}) => {
                         ...question,
                         answerList: questionAnswers,
                       });
-                      console.log(toJS(QuizStore.userAnswers));
                     }
                   }}
                   className="button__common-style button__take-quiz-next"
@@ -299,7 +295,6 @@ export const TakeQuiz: React.FC<TakeQuizProps> = ({}) => {
     <div className="take-quiz button">
       <Layout>
         <div className="flex align-items-center justify-content-center mt-8">
-          {/* <button onClick={addElement}>Add item</button> */}
           {loading ? (
             <LoadingScreen loading={loading} />
           ) : (

@@ -125,9 +125,6 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
           !answer.answerName &&
           formik.values.questionType !== QUESTION_TYPES.SUBJECTIVE.value
         ) {
-          console.log(
-            !data.answerList?.some((answer) => answer.isCorrectAnswer === true)
-          );
           errors[`answerInput${index}`] = "Answer name is required!";
         }
       });
