@@ -61,7 +61,7 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
       // Reset the correctAnswers when changing question type
       setAnswerList((currentState) => {
         let arrayCopy = [...currentState];
-        return (arrayCopy = arrayCopy.map((answer) => {
+        return (arrayCopy = arrayCopy.map((answer, index) => {
           return {
             ...answer,
             isCorrectAnswer: false,
@@ -315,7 +315,9 @@ export const CreateQuizSecondCard: React.FC = observer(() => {
                   type="button"
                   label="Add answer"
                   className="button__common-style button__create-quiz-add"
-                  onClick={() => addAnswer()}
+                  onClick={() => {
+                    addAnswer();
+                  }}
                 />
               </div>
             )}

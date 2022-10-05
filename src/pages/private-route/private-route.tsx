@@ -22,13 +22,12 @@ export const PrivateRoute = observer(
   }: ProtectedRouteProps) => {
     if (isAuthenticated) {
       if (isAdminRoute) {
-        return isAdmin ? (
-          component
-        ) : (
-          <Navigate to={{ pathname: "/homepage" }} />
-        );
-      } else {
+        if (isAdmin) {
+          return component;
+        }
         return <Navigate to={{ pathname: "/homepage" }} />;
+      } else {
+        return component;
       }
     } else {
       return <Navigate to={{ pathname: authenticationPath }} />;

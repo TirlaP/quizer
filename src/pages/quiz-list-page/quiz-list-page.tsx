@@ -100,9 +100,11 @@ export const QuizList: React.FC<QuizListProps> = () => {
                   <Button
                     className="button__common-style button__edit-quiz"
                     onClick={() => {
-                      QuizStore.selectQuiz(quiz.id);
+                      QuizStore.selectQuiz(quiz.id, "edit");
                       navigate({
-                        pathname: "/create-quiz",
+                        pathname: `${
+                          user.isAdmin ? "/create-quiz" : "/take-quiz"
+                        }`,
                         search: createSearchParams({
                           quizId: `${quiz.id}`,
                         }).toString(),

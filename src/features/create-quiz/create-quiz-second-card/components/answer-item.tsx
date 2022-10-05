@@ -4,6 +4,7 @@ import { Checkbox } from "primereact/checkbox";
 import { InputTextarea } from "primereact/inputtextarea";
 
 import React from "react";
+import { QUESTION_TYPES } from "../../../../common/constants/constant";
 
 interface AnswerItemProps {
   checked: boolean;
@@ -39,7 +40,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
       <label htmlFor="question" className="create-quiz__input-label">
         Answer {index < 9 ? `0${index + 1}` : `${index + 1}`}*
       </label>
-      {questionType !== "subjective" && (
+      {questionType !== QUESTION_TYPES.SUBJECTIVE.value && (
         <div className="flex flex-row align-items-center gap-3">
           <InputText
             id={`${name}`}
@@ -61,9 +62,9 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
           ></i>
         </div>
       )}
-      {questionType !== "subjective" && getError(`${name}`)}
+      {questionType !== QUESTION_TYPES.SUBJECTIVE.value && getError(`${name}`)}
 
-      {questionType?.toLowerCase() === "single" && (
+      {questionType === QUESTION_TYPES.SINGLE.value && (
         <div className="field-radiobutton mt-2">
           <RadioButton
             inputId={inputId}
@@ -77,7 +78,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
         </div>
       )}
 
-      {questionType?.toLowerCase() === "multiple" && (
+      {questionType === QUESTION_TYPES.MULTIPLE.value && (
         <div className="field-radiobutton mt-2">
           <Checkbox
             inputId={inputId}
@@ -91,7 +92,7 @@ export const AnswerItem: React.FC<AnswerItemProps> = ({
         </div>
       )}
 
-      {questionType?.toLowerCase() === "subjective" && (
+      {questionType === QUESTION_TYPES.SUBJECTIVE.value && (
         <div className="field-radiobutton mt-2">
           <InputTextarea
             style={{ width: "640px" }}

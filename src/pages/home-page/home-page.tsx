@@ -15,16 +15,11 @@ import { LoginStore } from "../../features/authentication/login/store/LoginStore
 interface HomePageProps {}
 
 export const HomePage: React.FC<HomePageProps> = () => {
-  const [quizzes, setQuizzes] = useState<{ [key: string]: any }[]>([]);
   const quizzesCollectionRef = collection(db, "quizzes");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
     const getQuizzes = async () => {
       const fetchedQuizzes = query(
         quizzesCollectionRef,
@@ -39,15 +34,16 @@ export const HomePage: React.FC<HomePageProps> = () => {
         ...doc.data(),
         id: doc.id,
       }));
-      setQuizzes(fetchedData);
       QuizStore.setQuizzes(fetchedData);
+
+      setLoading(false);
     };
 
     getQuizzes();
   }, []);
 
   const verifyHomePageRender = () => {
-    return quizzes.length > 0 ? <QuizList /> : <NoQuizzes />;
+    return QuizStore.quizzes.length > 0 ? <QuizList /> : <NoQuizzes />;
   };
 
   return (

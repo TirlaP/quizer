@@ -21,3 +21,8 @@ export const QUESTION_TYPES = {
   SINGLE: { name: "Single answer", value: "single" },
   SUBJECTIVE: { name: "Subjective", value: "subjective" },
 };
+
+export const SELECTED_QUIZ_TYPES = {
+  EDIT: "edit",
+  TAKE: "take",
+};

@@ -29,7 +29,7 @@ export const CreateQuiz: React.FC<CreateQuizProps> = () => {
           ...doc.data(),
           id: doc.id,
         });
-        QuizStore.selectQuiz(quizId);
+        QuizStore.selectQuiz(quizId, "edit");
       });
     } else {
       // Add empty question item on refresh of "New quiz" page

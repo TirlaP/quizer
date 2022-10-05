@@ -9,18 +9,16 @@ import "../../../styles/buttons.scss";
 import { RESOLUTION_BREAKPOINTS } from "../../constants/constant";
 
 import logo from "../../../common/assets/Logo-red.png";
-import { Button } from "primereact/button";
 
 import { LoginStore } from "../../../features/authentication/login/store/LoginStore";
 import { observer } from "mobx-react-lite";
+import { NavbarReusable } from "./components/navbar-reusable";
 
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = observer(() => {
   const [mobile, setMobile] = useState(false);
   const [sidebar, setSidebar] = useState(false);
-
-  const { isAuthenticated, user } = LoginStore.login;
 
   const navigate = useNavigate();
 
@@ -64,52 +62,7 @@ export const Header: React.FC<HeaderProps> = observer(() => {
             <img src={logo} alt="" />
           </Link>
           {!mobile && (
-            <ul className="menu__items navbar__items">
-              <li className="navbar__item">
-                <Link to="/homepage">
-                  <span>Home</span>
-                </Link>
-              </li>
-              {user.isAdmin && (
-                <>
-                  <li className="navbar__item">
-                    <Link to="/dashboard">
-                      <span>Dashboard</span>
-                    </Link>
-                  </li>
-                  <li className="navbar__item button">
-                    <Button
-                      label="Create Quiz"
-                      className="button__common-style button__navbar-create"
-                      onClick={() => navigate("/create-quiz")}
-                    />
-                  </li>
-                </>
-              )}
-              <li
-                className="navbar__item"
-                onClick={
-                  isAuthenticated
-                    ? logout
-                    : () => {
-                        navigate("/login");
-                      }
-                }
-              >
-                <Link to="/login">
-                  {isAuthenticated ? (
-                    <div className="flex align-items-center gap-2">
-                      <span>{user.isAdmin ? "Admin" : "User"}</span>
-                      <i className="pi pi-sign-out"></i>
-                    </div>
-                  ) : (
-                    <div>
-                      <span>Login</span>
-                    </div>
-                  )}
-                </Link>
-              </li>
-            </ul>
+            <NavbarReusable mobile={mobile} sidebar={sidebar} logout={logout} />
           )}
 
           {mobile && (
@@ -132,52 +85,7 @@ export const Header: React.FC<HeaderProps> = observer(() => {
 
       <div className={sidebar ? "sidebar sidebar--active" : "sidebar"}>
         {mobile && (
-          <ul className="menu__items sidebar__items">
-            <li className="sidebar__item">
-              <Link to="/homepage">
-                <span>Home</span>
-              </Link>
-            </li>
-            {user.isAdmin && (
-              <>
-                <li className="sidebar__item">
-                  <Link to="/dashboard">
-                    <span>Dashboard</span>
-                  </Link>
-                </li>
-                <li className="sidebar__item button">
-                  <Button
-                    label="Create Quiz"
-                    className="button__common-style button__navbar-create"
-                    onClick={() => navigate("/create-quiz")}
-                  />
-                </li>
-              </>
-            )}
-            <li
-              className="sidebar__item"
-              onClick={
-                isAuthenticated
-                  ? logout
-                  : () => {
-                      navigate("/login");
-                    }
-              }
-            >
-              <Link to="/login">
-                {isAuthenticated ? (
-                  <div className="flex align-items-center gap-2">
-                    <span>{user.isAdmin ? "Admin" : "User"}</span>
-                    <i className="pi pi-sign-out"></i>
-                  </div>
-                ) : (
-                  <div>
-                    <span>Login</span>
-                  </div>
-                )}
-              </Link>
-            </li>
-          </ul>
+          <NavbarReusable mobile={mobile} sidebar={sidebar} logout={logout} />
         )}
       </div>
     </>
