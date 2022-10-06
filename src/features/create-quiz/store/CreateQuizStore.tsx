@@ -1,14 +1,23 @@
 import { makeAutoObservable, toJS } from "mobx";
-import { IQuestion } from "../../../common/models/model";
+import {
+  IQuestion,
+  IUserAnswersList,
+  IUserQuestionAnswer,
+} from "../../../common/models/model";
 import uuid from "react-uuid";
 
 import { IQuestionItem, IQuizItem } from "../../../common/models/model";
+import { SELECTED_QUIZ_TYPES } from "../../../common/constants/constant";
 
 export class QuizStoreImpl {
   quizzes: IQuizItem[] = [];
   questions: IQuestionItem[] = [];
+  userAnswers: IUserQuestionAnswer[] = [];
   selectedQuizID?: string;
+  selectedTakeQuizID?: string;
   selectedQuestionID?: string;
+  activeQuestionId?: string;
+  finalScoreQuiz?: number;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -54,12 +63,38 @@ export class QuizStoreImpl {
     }
   }
 
+  editUserQuestionAnswer(
+    questionId: string,
+    updatedQuestionAnswer: IUserQuestionAnswer
+  ) {
+    let result = this.userAnswers.find(
+      (question) => question.id === questionId
+    );
+    let resultIndex = this.userAnswers.findIndex(
+      (question) => question.id === questionId
+    );
+
+    if (result) {
+      this.userAnswers[resultIndex] = updatedQuestionAnswer;
+    } else {
+      this.userAnswers.push(updatedQuestionAnswer);
+    }
+  }
+
   setQuizzes(fetchedQuizzes: IQuizItem[]) {
     this.quizzes = [...fetchedQuizzes];
   }
 
-  selectQuiz(quizId: string) {
-    this.selectedQuizID = quizId;
+  selectQuiz(quizId: string, selectedQuizType: string) {
+    if (selectedQuizType === SELECTED_QUIZ_TYPES.EDIT) {
+      this.selectedQuizID = quizId;
+    } else {
+      this.selectedTakeQuizID = quizId;
+    }
+  }
+
+  setQuestions(questions: any) {
+    this.questions = questions;
   }
 
   addQuiz(quiz: IQuizItem) {
@@ -78,12 +113,12 @@ export class QuizStoreImpl {
       question: {
         answerList: [
           {
-            isCorrectAnswer: true,
+            isCorrectAnswer: false,
             answerName: "",
           },
         ],
         questionName: "",
-        questionType: "",
+        questionType: "single",
       },
       completed: false,
     };
@@ -98,8 +133,19 @@ export class QuizStoreImpl {
   selectQuestion(question: IQuestionItem | null) {
     this.selectedQuestionID = question?.id;
   }
+
+  selectActiveQuestion(questionId: string) {
+    this.activeQuestionId = questionId;
+  }
+
   deselectQuestion() {
     this.selectedQuestionID = "";
+  }
+
+  get activeQuestion() {
+    return this.userAnswers.find(
+      (question) => question.id === this.activeQuestionId
+    );
   }
 
   get selectedQuestion() {
@@ -111,7 +157,6 @@ export class QuizStoreImpl {
   get selectedQuestionIsEmpty() {
     return (
       this.selectedQuestion?.question?.questionName === "" &&
-      this.selectedQuestion?.question?.questionType === "" &&
       this.selectedQuestion?.question?.answerList.length === 1
     );
   }
@@ -119,13 +164,15 @@ export class QuizStoreImpl {
     return this.questions.some(
       (question) =>
         question.question?.questionName === "" &&
-        question.question?.questionType === "" &&
         question.question?.answerList.length === 1
     );
   }
 
   get selectedQuiz() {
     return this.quizzes.find((quiz) => quiz.id === this.selectedQuizID);
+  }
+  get selectedTakeQuiz() {
+    return this.quizzes.find((quiz) => quiz.id === this.selectedTakeQuizID);
   }
 
   get status() {

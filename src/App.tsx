@@ -18,6 +18,8 @@ import { CreateQuiz } from "./pages/create-quiz-page/create-quiz";
 import { QuizList } from "./pages/quiz-list-page/quiz-list-page";
 import { LoadingScreen } from "./common/components/loading-screen/loading-screen";
 import { Layout } from "./pages/layout-page/layout";
+import { TakeQuiz } from "./pages/take-quiz-page/take-quiz";
+import { Congratulations } from "./pages/congratulations-page/congratulations";
 
 export const App: React.FC = observer(() => {
   let defaultProtectedRouteProps: Omit<
@@ -58,6 +60,7 @@ export const App: React.FC = observer(() => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/quiz-list" element={<QuizList />} />
+          <Route path="/congratulations" element={<Congratulations />} />
           <Route
             path="/create-quiz"
             element={
@@ -65,6 +68,16 @@ export const App: React.FC = observer(() => {
                 {...defaultProtectedRouteProps}
                 isAdminRoute={true}
                 component={<CreateQuiz />}
+              />
+            }
+          />
+          <Route
+            path="/take-quiz"
+            element={
+              <PrivateRoute
+                {...defaultProtectedRouteProps}
+                isAdminRoute={false}
+                component={<TakeQuiz />}
               />
             }
           />

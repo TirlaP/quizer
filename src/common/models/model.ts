@@ -16,6 +16,17 @@ export interface IAnswersList {
   answerName: string;
 }
 
+export interface IUserQuestionAnswer {
+  id: string;
+  answerList: IUserAnswersList[];
+  questionName?: string;
+  questionType: string | null;
+}
+export interface IUserAnswersList {
+  isCorrectAnswer?: boolean;
+  answerName: string;
+}
+
 /**
  * QUIZ - STORE
  */

@@ -15,3 +15,14 @@ export const FIREBASE_CRUD_METHOD = {
   UPDATE: "update",
   ADD: "add",
 };
+
+export const QUESTION_TYPES = {
+  MULTIPLE: { name: "Multiple answers", value: "multiple" },
+  SINGLE: { name: "Single answer", value: "single" },
+  SUBJECTIVE: { name: "Subjective", value: "subjective" },
+};
+
+export const SELECTED_QUIZ_TYPES = {
+  EDIT: "edit",
+  TAKE: "take",
+};
